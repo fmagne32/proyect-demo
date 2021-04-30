@@ -18,11 +18,16 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  },
+  }, {
+    name: "ProblemOne",
+    path: "problem-one",
+    component: async () => await import("../views/ViewOne")
+  }
 ];
 
 const router = new VueRouter({
   routes,
+  mode: "history"
 });
 
 export default router;
