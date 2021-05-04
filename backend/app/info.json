@@ -1,0 +1,107 @@
+[
+    {
+        "nombre": "junior",
+        "detalle": [
+            {
+                "local": {
+                    "nombre": "Buenisimos",
+                    "sets": 3
+                },
+                "visitante": {
+                    "nombre": "Malisimos",
+                    "sets": 0
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Buenillos",
+                    "sets": 2
+                },
+                "visitante": {
+                    "nombre": "Malillos",
+                    "sets": 1
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Buenillos",
+                    "sets": 3
+                },
+                "visitante": {
+                    "nombre": "Malisimos",
+                    "sets": 0
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Buenisimos",
+                    "sets": 3
+                },
+                "visitante": {
+                    "nombre": "Malillos",
+                    "sets": 0
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Buenisimos",
+                    "sets": 2
+                },
+                "visitante": {
+                    "nombre": "Buenillos",
+                    "sets": 1
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Malisimos",
+                    "sets": 0
+                },
+                "visitante": {
+                    "nombre": "Buenisimos",
+                    "sets": 3
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Malillos",
+                    "sets": 1
+                },
+                "visitante": {
+                    "nombre": "Buenillos",
+                    "sets": 2
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Malisimos",
+                    "sets": 0
+                },
+                "visitante": {
+                    "nombre": "Buenillos",
+                    "sets": 3
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Malillos",
+                    "sets": 0
+                },
+                "visitante": {
+                    "nombre": "Buenisimos",
+                    "sets": 3
+                }
+            },
+            {
+                "local": {
+                    "nombre": "Buenillos",
+                    "sets": 1
+                },
+                "visitante": {
+                    "nombre": "Buenisimos",
+                    "sets": 2
+                }
+            }
+        ]
+    }
+]

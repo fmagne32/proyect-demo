@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from pydantic import BaseModel
 
-from typing import Any, List, Optional, TypeVar, Generic,NamedTuple
+from typing import Any, List, Optional, TypeVar, Generic, NamedTuple
 from pydantic.generics import GenericModel
 from pydantic.types import Json
 
@@ -10,18 +10,53 @@ T = TypeVar('T')
 
 DataT = TypeVar('DataT')
 
+
 class AjedrezEnum(str, enumModel):
     DISPONIBLE = 'Disponible'
     OBSTACULO = 'Obstaculo'
     REINA = 'Reina'
+    NINGUNO = 'Ninguno'
+
+
+class PadelEnum(str, enumModel):
+    GANO = 'Gano'
+    EMPATE = 'Empate'
+    NINGUNO = 'Ninguno'
+
+
+class DetalleEquipo(BaseModel):
+    nombre: str
+    sets: int
+
+class Equipo(BaseModel):
+    local: DetalleEquipo
+    visitante:DetalleEquipo
+
+class Categoria(BaseModel):
+    nombre: str
+    detalle: List[Equipo]
+
+
+class ResponsePadel(BaseModel):
+    categoria: str
+    equipo: str
+    status:PadelEnum
+
 
 class Point(NamedTuple):
     fila: int
     columna: int
 
+
+class DetailChees(BaseModel):
+    info: int
+    posicion: Point
+
+
 class FiguraResponse(BaseModel):
-    selected:bool
-    figura:AjedrezEnum
+    selected: bool
+    figura: AjedrezEnum
+
 
 class ParamProblemTres(BaseModel):
     n: int
@@ -30,15 +65,17 @@ class ParamProblemTres(BaseModel):
     cq: int
     obstaculo: Optional[List[List[int]]]
 
+
 class ParamProblemTresResponse(BaseModel):
     color: str
     #icono: str
-    #selected:bool
-    #disponible:bool
-    #obstaculo:bool
+    # selected:bool
+    # disponible:bool
+    # obstaculo:bool
     indice: int
-    coordenada:Point
-    detalle:FiguraResponse
+    coordenada: Point
+    detalle: FiguraResponse
+
     class Config:
         orm_mode = True
 
