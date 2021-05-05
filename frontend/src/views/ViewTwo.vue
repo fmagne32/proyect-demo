@@ -2,7 +2,17 @@
   <v-container>
     <v-container class="grey lighten-5">
       <v-row>
-        <v-btn rounded color="primary" dark>Prueba</v-btn>
+        <v-btn
+          rounded
+          color="primary"
+          @click="
+            $router.push({
+              name: 'Home',
+            })
+          "
+          dark
+          >Home</v-btn
+        >
 
         <v-container>
           <v-row>
@@ -91,53 +101,63 @@
               </v-card>
             </v-container>
           </v-row>
+
+          <v-btn @click="MostrarAjedrez" rounded color="success" dark
+            >Submit</v-btn
+          >
+          <br />
+          <br />
+          <v-row>
+            <v-container>
+              <div>
+                <table class="chess-board">
+                  <tbody>
+                    <tr
+                      v-for="(item, index) in listado"
+                      :key="`chess-${index}`"
+                    >
+                      <td
+                        class="light"
+                        v-for="(itemx, indej) in item"
+                        :key="`chessv2-${indej}`"
+                        v-bind:style="{ 'background-color': itemx.color }"
+                      >
+                        <div>
+                          <div v-if="itemx.detalle.figura == 'Reina'">
+                            <img
+                              width="40"
+                              height="40"
+                              :src="itemx.detalle.imageurl"
+                            />
+                          </div>
+                          <div
+                            v-else-if="itemx.detalle.figura === 'Disponible'"
+                          >
+                            <img
+                              width="30"
+                              height="30"
+                              :src="itemx.detalle.imageurl"
+                            />
+                          </div>
+                          <div v-else-if="itemx.detalle.figura === 'Obstaculo'">
+                            <img
+                              width="30"
+                              height="30"
+                              :src="itemx.detalle.imageurl"
+                            />
+                          </div>
+                          <div v-else>
+                            <span></span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </v-container>
+          </v-row>
         </v-container>
-        <v-btn @click="MostrarAjedrez" rounded color="primary" dark>Show</v-btn>
-
-        <div>
-          listado
-
-          <table class="chess-board">
-            <tbody>
-              <tr v-for="(item, index) in listado" :key="`chess-${index}`">
-                <td
-                  class="light"
-                  v-for="(itemx, indej) in item"
-                  :key="`chessv2-${indej}`"
-                  v-bind:style="{ 'background-color': itemx.color }"
-                >
-                  <div>
-                    <div v-if="itemx.detalle.figura == 'Reina'">
-                      <img
-                        width="40"
-                        height="40"
-                        :src="itemx.detalle.imageurl"
-                      />
-                    </div>
-                    <div v-else-if="itemx.detalle.figura === 'Disponible'">
-                      <img
-                        width="30"
-                        height="30"
-                        :src="itemx.detalle.imageurl"
-                      />
-                    </div>
-                    <div v-else-if="itemx.detalle.figura === 'Obstaculo'">
-                      <img
-                        width="30"
-                        height="30"
-                        :src="itemx.detalle.imageurl"
-                      />
-                    </div>
-                    <div v-else>
-                      <span></span>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div></div>
       </v-row>
     </v-container>
   </v-container>
@@ -174,7 +194,6 @@ export default {
   created() {},
   methods: {
     loadobstaculo() {
-      console.log("click");
       const item = {
         fila: parseInt(this.subform.fila),
         columna: parseInt(this.subform.columna),
@@ -182,7 +201,6 @@ export default {
       this.obstaculo.push(item);
       this.subform.fila = 0;
       this.subform.columna = 0;
-      console.log(this.obstaculo);
     },
     async MostrarAjedrez() {
       this.formulario.obstaculo = this.obstaculo;
@@ -235,10 +253,10 @@ export default {
 }
 .chess-board th:first-child,
 .chess-board td:last-child {
-  border-right: 1px solid #000;
+  border-right: 3px solid #000;
 }
 .chess-board tr:last-child td {
-  border-bottom: 1px solid;
+  border-bottom: 3px solid;
 }
 .chess-board th:empty {
   border: none;
@@ -249,5 +267,6 @@ export default {
   text-align: center;
   font-size: 32px;
   line-height: 0;
+  border: 3px solid #000;
 }
 </style>
