@@ -39,16 +39,15 @@ async def problemuno(request: List[SchemaCategoria]):
         return JSONResponse(status_code=200, content=json_compatible_item_data)
     except Exception as e:
         print(e)
-        # customdict = post_utils.LoadExcepcion(e)
-        # print(customdict)
         json_compatible_item_data = jsonable_encoder(SchemaResponse[dict](codigo=1, fechahora=datetime.now(
         ), mensaje="Ha Ocurrido Un Error", data=None))
         return JSONResponse(status_code=200, content=json_compatible_item_data)
 
 
-@router.post("/problemtree", response_model=SchemaResponse[List[List[ShemaTres]]])
-async def problemtres(request: ParamProblemTres):
+@router.post("/problemtwo", response_model=SchemaResponse[List[List[ShemaTres]]])
+async def problemdos(request: ParamProblemTres):
     try:
+        print(request)
         response: List[List[ShemaTres]] = await RepoLab.GenerateChess(request)
         #mimenu = []
         dataxx = SchemaResponse[List[List[ShemaTres]]](

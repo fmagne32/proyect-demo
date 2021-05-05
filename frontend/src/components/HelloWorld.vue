@@ -13,6 +13,16 @@
             "
             >Problem 1</v-btn
           >
+          <v-btn
+            color="primary"
+            elevation="2"
+            @click="
+              $router.push({
+                name: 'ProblemTwo',
+              })
+            "
+            >Problem 2</v-btn
+          >
         </v-container>
       </v-col>
 

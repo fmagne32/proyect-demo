@@ -1,0 +1,207 @@
+{
+    "codigo": 0,
+    "fechahora": "2021-05-05T11:38:57.606344",
+    "mensaje": "Bien",
+    "data": [
+      [
+        {
+          "color": "#efebe9",
+          "indice": 4,
+          "coordenada": [
+            4,
+            1
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        },
+        {
+          "color": "#6d4c41",
+          "indice": 4,
+          "coordenada": [
+            4,
+            2
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        },
+        {
+          "color": "#efebe9",
+          "indice": 4,
+          "coordenada": [
+            4,
+            3
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        },
+        {
+          "color": "#6d4c41",
+          "indice": 4,
+          "coordenada": [
+            4,
+            4
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Reina"
+          }
+        }
+      ],
+      [
+        {
+          "color": "#6d4c41",
+          "indice": 3,
+          "coordenada": [
+            3,
+            1
+          ],
+          "detalle": {
+            "selected": false,
+            "figura": "Ninguno"
+          }
+        },
+        {
+          "color": "#efebe9",
+          "indice": 3,
+          "coordenada": [
+            3,
+            2
+          ],
+          "detalle": {
+            "selected": false,
+            "figura": "Ninguno"
+          }
+        },
+        {
+          "color": "#6d4c41",
+          "indice": 3,
+          "coordenada": [
+            3,
+            3
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        },
+        {
+          "color": "#efebe9",
+          "indice": 3,
+          "coordenada": [
+            3,
+            4
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        }
+      ],
+      [
+        {
+          "color": "#efebe9",
+          "indice": 2,
+          "coordenada": [
+            2,
+            1
+          ],
+          "detalle": {
+            "selected": false,
+            "figura": "Ninguno"
+          }
+        },
+        {
+          "color": "#6d4c41",
+          "indice": 2,
+          "coordenada": [
+            2,
+            2
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        },
+        {
+          "color": "#efebe9",
+          "indice": 2,
+          "coordenada": [
+            2,
+            3
+          ],
+          "detalle": {
+            "selected": false,
+            "figura": "Ninguno"
+          }
+        },
+        {
+          "color": "#6d4c41",
+          "indice": 2,
+          "coordenada": [
+            2,
+            4
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        }
+      ],
+      [
+        {
+          "color": "#6d4c41",
+          "indice": 1,
+          "coordenada": [
+            1,
+            1
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        },
+        {
+          "color": "#efebe9",
+          "indice": 1,
+          "coordenada": [
+            1,
+            2
+          ],
+          "detalle": {
+            "selected": false,
+            "figura": "Ninguno"
+          }
+        },
+        {
+          "color": "#6d4c41",
+          "indice": 1,
+          "coordenada": [
+            1,
+            3
+          ],
+          "detalle": {
+            "selected": false,
+            "figura": "Ninguno"
+          }
+        },
+        {
+          "color": "#efebe9",
+          "indice": 1,
+          "coordenada": [
+            1,
+            4
+          ],
+          "detalle": {
+            "selected": true,
+            "figura": "Disponible"
+          }
+        }
+      ]
+    ]
+  }

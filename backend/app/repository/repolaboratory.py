@@ -8,6 +8,106 @@ from pydantic import parse_obj_as
 
 
 class RepoLaboratory:
+
+    # FiltroDisponible
+    @classmethod
+    def FiltroDisponible(cls, lista: List[List[ShemaTres]], fila: int, columna: int, size: int):
+        maxnum = size+1
+        contador = (size-fila)+1
+        n = (size - contador)+1
+        diccionariox = []
+
+        # Arriba Derecha
+        # f+1
+        # c+1
+
+        contador_m = 0
+        contador_n = 0
+        contador_p = 0
+        contador_o = 0
+
+        contador_q = 0
+        contador_r = 0
+        contador_s = 0
+        contador_t = 0
+
+        for x in range(n):
+            contador_m += 1
+            fila_m = fila+contador_m
+            columna_m = columna+contador_m
+            if ((fila_m > 0) and (columna_m > 0) and (fila_m < maxnum) and (columna_m < maxnum)):
+                info_uno = dict(fila=fila_m, columna=columna_m)
+                diccionariox.append(info_uno)
+
+        # Arriba Izquierda
+        # f+1
+        # c-1
+
+        for x in range(n):
+            contador_p += 1
+            fila_p = fila+contador_p
+            columna_p = columna-contador_p
+            if ((fila_p > 0) and (columna_p > 0) and (fila_p < maxnum) and (columna_p < maxnum)):
+                info_dos = dict(fila=fila_p, columna=columna_p)
+                diccionariox.append(info_dos)
+        # Abajo Izquierda
+        # f-1
+        # c-1
+
+        for x in range(n):
+            contador_n += 1
+            fila_n = fila-contador_n
+            columna_n = columna-contador_n
+
+            if ((fila_n > 0) and (columna_n > 0) and (fila_n < maxnum) and (columna_n < maxnum)):
+                info_tres = dict(fila=fila_n, columna=columna_n)
+                diccionariox.append(info_tres)
+        # Abajo Derecha
+        # f-1
+        # c+1
+        for x in range(n):
+            contador_o += 1
+            fila_o = fila-contador_o
+            columna_o = columna+contador_o
+            if ((fila_o > 0) and (columna_o > 0) and (fila_o < maxnum) and (columna_o < maxnum)):
+                info_cuatro = dict(fila=fila_o, columna=columna_o)
+                diccionariox.append(info_cuatro)
+
+        # Arriba Only
+
+        for x in range(n):
+            contador_q += 1
+            fila_q = fila + contador_q
+            if ((fila_q > 0) and (fila_q < maxnum)):
+                info_cinco = dict(fila=fila_q, columna=columna)
+                diccionariox.append(info_cinco)
+        # Abajo Only
+        for x in range(n):
+            contador_r += 1
+            fila_r = fila - contador_r
+            if ((fila_r > 0) and (fila_r < maxnum)):
+                info_seis = dict(fila=fila_r, columna=columna)
+                diccionariox.append(info_seis)
+
+        # Izquierda Only
+        for x in range(n):
+            contador_s += 1
+            columna_s = columna - contador_s
+            if ((columna_s > 0) and (columna_s < maxnum)):
+                info_siete = dict(fila=fila, columna=columna_s)
+                diccionariox.append(info_siete)
+
+        # Derecha Only
+
+        for x in range(n):
+            contador_t += 1
+            columna_t = columna + contador_t
+            if ((columna_t > 0) and (columna_t < maxnum)):
+                info_ocho = dict(fila=fila, columna=columna_t)
+                diccionariox.append(info_ocho)
+
+        return diccionariox
+
     # Load Reina
     @classmethod
     def FiltradoArray(cls, lista: List[ShemaTres], fila: int, columna: int):
@@ -23,68 +123,21 @@ class RepoLaboratory:
     # Load Ataque
 
     @classmethod
-    def FiltradoDinamico(cls, lista: List[List[ShemaTres]], fila: int, columna: int, longitud: int):
-        contador = longitud
-        contadory = 0
+    def FiltradoDinamico(cls, lista: List[List[ShemaTres]], casilla: List[dict], obstaculo: List[dict]):
         listaunixo = []
-        filtrox = []
-        columna_x = 0
-        columna_y = 0
-        for y in lista:
 
-            filtroxsub = []
+        for y in lista:
             for x in y:
                 if ((x.detalle.figura != AjedrezEnum.REINA)):
-                    if x.indice == fila:
+                    # print('hola')
+                    status: bool = cls.GetCasillaDisponible(
+                        casilla, x.coordenada.fila, x.coordenada.columna)
+                    if status:
                         x.detalle = SchemaFigura(
-                            selected=True, figura=AjedrezEnum.DISPONIBLE)
-                    if x.coordenada.columna == columna:  # Columna Reina Load Vertica
-                        x.detalle = SchemaFigura(
-                            selected=True, figura=AjedrezEnum.DISPONIBLE)
-                # filtroxsub.append()
-
-                detail = dict(
-                    info=contador, posicion=dict(fila=columna_x, columna=columna_y))
-                filtroxsub.append(detail)
-
-                columna_x = ((fila-contadory)+1)
-                columna_y = ((columna - contadory)+1)
-
-                if ((x.coordenada.fila == columna_x) and (x.coordenada.columna == columna_y)):  # MINI BUG
-                    # Ok
-
-                    print(
-                        f'filtrado abajo izquierda 222  {columna_x} - {columna_y} CONTADOR x {contador} CONTADOR y {contadory} Indice {x.indice}')
-                    print(
-                        f'coordenada encontrada 222 {x.coordenada.fila} - {x.coordenada.columna}')
-                    x.detalle = SchemaFigura(
-                        selected=True, figura=AjedrezEnum.DISPONIBLE)
-
-                """if ((x.coordenada.fila == 3) and (x.coordenada.columna == 2)):  # MINI BUG
-                    # Ok
-
-                    print(
-                        f'filtrado abajo izquierda vvv  {columna_x} - {columna_y} CONTADOR x {contador} CONTADOR y {contadory} Indice {x.indice}')
-                    print(
-                        f'coordenada encontrada vvv {x.coordenada.fila} - {x.coordenada.columna}')
-                    x.detalle = SchemaFigura(
-                        selected=True, figura=AjedrezEnum.DISPONIBLE)"""
-
-            filtrox.append(filtroxsub)
-            # detail = DetailChees(
-            #    info=contador, posicion=Point(columna_x, columna_y))
-
-            # listaunixo.append(y)
-
+                            selected=True, imageurl='https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Circle-green.svg/1024px-Circle-green.svg.png', figura=AjedrezEnum.DISPONIBLE)
             listaunixo.append(y)
-            contador -= 1
-            contadory += 1
-        # print(filtrox)
-        print("contador")
-        print(contador)
         print("====================================")
-
-        mijson = json.dumps(filtrox, ensure_ascii=False)
+        #mijson = json.dumps(filtrox, ensure_ascii=False)
         # print(mijson)
         return listaunixo
 
@@ -192,6 +245,18 @@ class RepoLaboratory:
         return datax
 
     @classmethod
+    def GetCasillaDisponible(cls, lista: List[dict], fila: int, columna: int) -> bool:
+        data: bool = False
+
+        for entity in lista:
+            if ((entity['fila'] == fila) and (entity['columna'] == columna)):
+                data = True
+        # datax:int = ((entity['fila'] == fila) and (entity['columna'] == columna))
+        # print("Resultado Busqueda")
+        # print(datax)
+        return data
+
+    @classmethod
     def NumeroPar(cls, numero: int, index: int) -> int:
         b = 0
         if index % 2 == 0:
@@ -227,6 +292,7 @@ class RepoLaboratory:
             # Lista de Equipos
             equipos: List[str] = []
             for x in entity:
+
                 for y in x.detalle:
                     equipos.append(y.local.nombre)
                     equipos.append(y.visitante.nombre)
@@ -258,6 +324,24 @@ class RepoLaboratory:
             print(partidofaltante)
 
             print("equipo ganado")
+
+            # for item in res:
+            clave: str = "Buenisimos"
+
+            for item in entity[0].detalle:
+                if item.local.nombre == clave:
+                    print(item)
+                    puntos = 0
+                    if item.local.sets > item.visitante.sets:
+                        puntos += 2
+                    if item.local.sets < item.visitante.sets:
+                        puntos += 1
+                if item.visitante.nombre == clave:
+                    if item.visitante.sets > item.local.sets:
+                        puntos += 2
+                    if item.visitante.sets > item.local.sets:
+                        puntos += 1
+
             return ResponsePadel(categoria="s", equipo="ss", status=PadelEnum.EMPATE)
         except Exception as e:
             print(e)
@@ -287,7 +371,7 @@ class RepoLaboratory:
                     demoxxxx = cls.LoadInfo(i, j, union)
                     if ((demoxxxx.coordenada.columna == columnareina) and (demoxxxx.coordenada.fila == filareina)):
                         demoxxxx.detalle = SchemaFigura(
-                            selected=True, figura=AjedrezEnum.REINA)
+                            selected=True, imageurl='https://pic.onlinewebfonts.com/svg/img_546821.png', figura=AjedrezEnum.REINA)
 
                     mimenu.append(demoxxxx)
                     b[i][j] = j+1
@@ -295,10 +379,6 @@ class RepoLaboratory:
                 mimenu_extra.append(mimenu)
                 contadorx += 1
 
-            # print(mimenu_extra)
-            # print(b)
-            # print(type(b))
-            # print(f'Get Reina de {filareina} - {columnareina}')
             # filtrado =list(filter(cls.GetReina(filareina,columnareina),mimenu))
             filtrounox = Point(filareina, columnareina)
             # return entity.coordenada==filtrounox
@@ -309,10 +389,7 @@ class RepoLaboratory:
             #    filter(lambda x: x.coordenada == filtrounox, mimenu))
             # print(filtradovv)
             print("**********************")
-            # index = mimenu.index(filtradovv[0])
-            # print("mi indez")
-            # print(index)
-            # print(mimenu[0])
+
             """filtradovv[0].detalle = SchemaFigura(
                 selected=True, figura=AjedrezEnum.REINA)
             mimenu[index] = filtradovv[0]"""
@@ -328,12 +405,14 @@ class RepoLaboratory:
                 cls.FiltradoArrayDos, fila=filareina, columna=columnareina)
             # print(add3)
 
-            # resultxxx = map(add3, mimenu_extra)
+            filtrado_casilla = cls.FiltroDisponible(
+                mimenu_extra, filareina, columnareina, n)
+
+            obstaculo = []
             result_list = cls.FiltradoDinamico(
-                mimenu_extra, filareina, columnareina, n)  # list(resultxxx)
-            # print(result_list)
-            print(len(result_list))
-            # print(FiltradoArrayCustom)
+                mimenu_extra, filtrado_casilla, obstaculo)
+            print("======================")
+
             return result_list
         except Exception as e:
             print(e)

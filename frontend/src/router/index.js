@@ -22,6 +22,11 @@ const routes = [
     name: "ProblemOne",
     path: "problem-one",
     component: async () => await import("../views/ViewOne")
+  },
+  {
+    name: "ProblemTwo",
+    path: "problem-two",
+    component: async () => await import("../views/ViewTwo")
   }
 ];
 
