@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 import functools
 from typing import List, Optional
-from ..api.schema import RespuestaApi as SchemaResponse, PadelEnum, DetalleEquipo, ResponsePadel, ParamProblemTres, ParamProblemTresResponse, ParamProblemTresResponse as ShemaTres, FiguraResponse as SchemaFigura, AjedrezEnum, Point, DetailChees, Categoria as SchemaCategoria
+from ..api.schema import RespuestaApi as SchemaResponse, ObstaculoModel, PadelEnum, DetalleEquipo, ResponsePadel, ParamProblemTres, ParamProblemTresResponse, ParamProblemTresResponse as ShemaTres, FiguraResponse as SchemaFigura, AjedrezEnum, Point, DetailChees, Categoria as SchemaCategoria
 from pydantic.schema import schema
 from pydantic import parse_obj_as
 
@@ -53,7 +53,7 @@ class RepoLaboratory:
         # Abajo Izquierda
         # f-1
         # c-1
-
+        infoleft = []
         for x in range(n):
             contador_n += 1
             fila_n = fila-contador_n
@@ -62,6 +62,8 @@ class RepoLaboratory:
             if ((fila_n > 0) and (columna_n > 0) and (fila_n < maxnum) and (columna_n < maxnum)):
                 info_tres = dict(fila=fila_n, columna=columna_n)
                 diccionariox.append(info_tres)
+                infoleft.append(info_tres)
+        print(infoleft)
         # Abajo Derecha
         # f-1
         # c+1
@@ -257,6 +259,15 @@ class RepoLaboratory:
         return data
 
     @classmethod
+    def GetCasillaObstaculo(cls, lista: Optional[List[ObstaculoModel]], fila: int, columna: int) -> bool:
+        data = False
+        if lista is not None:
+            for entity in lista:
+                if ((entity.fila == fila) and (entity.columna == columna)):
+                    data = True
+        return data
+
+    @classmethod
     def NumeroPar(cls, numero: int, index: int) -> int:
         b = 0
         if index % 2 == 0:
@@ -268,12 +279,21 @@ class RepoLaboratory:
         return b
 
     @classmethod
-    def LoadInfo(cls, indice: int, valor: int, value_extra: int) -> ShemaTres:
+    def LoadInfo(cls,obstaculo: Optional[List[ObstaculoModel]], indice: int, valor: int, value_extra: int) -> ShemaTres:
         numero: int = cls.NumeroPar(indice, valor)
         micolor: str = numero == 0 and "#6d4c41" or "#efebe9"
+
         detallex = SchemaFigura(selected=False, figura=AjedrezEnum.NINGUNO)
         # inicial = indice+ 1
         second = valor + 1
+
+        is_obstacle = cls.GetCasillaObstaculo(
+            obstaculo, value_extra, second)
+        if is_obstacle:
+            print(f'indice {value_extra}- {second}')
+            info_close = ShemaTres(color=micolor, coordenada=Point(value_extra, second), indice=value_extra, detalle=SchemaFigura(
+                selected=True, imageurl='https://img.pngio.com/cancel-close-delete-dismiss-exit-recycle-remove-icon-close-png-512_512.png', figura=AjedrezEnum.OBSTACULO))
+            return info_close
         info = ShemaTres(color=micolor, coordenada=Point(
             value_extra, second), indice=value_extra, detalle=detallex)
         return info
@@ -363,12 +383,11 @@ class RepoLaboratory:
 
             for i in range(n):
                 union = n-contadorx
-                print(f'La fila {union}')
+                #print(f'La fila {union}')
                 mimenu: List[ShemaTres] = []
                 for j in range(n):
-                    # print(f'El resultado de {i} - {j}')
                     value_extra = n-contador
-                    demoxxxx = cls.LoadInfo(i, j, union)
+                    demoxxxx = cls.LoadInfo(entity.obstaculo, i, j, union)
                     if ((demoxxxx.coordenada.columna == columnareina) and (demoxxxx.coordenada.fila == filareina)):
                         demoxxxx.detalle = SchemaFigura(
                             selected=True, imageurl='https://pic.onlinewebfonts.com/svg/img_546821.png', figura=AjedrezEnum.REINA)
@@ -412,7 +431,7 @@ class RepoLaboratory:
             result_list = cls.FiltradoDinamico(
                 mimenu_extra, filtrado_casilla, obstaculo)
             print("======================")
-
+            # print(filtrado_casilla)
             return result_list
         except Exception as e:
             print(e)

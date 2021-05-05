@@ -50,7 +50,7 @@ class ResponsePadel(BaseModel):
     equipo: str
     status: PadelEnum
 
-class Obstaculo(BaseModel):
+class ObstaculoModel(BaseModel):
     fila: int
     columna: int
 
@@ -75,7 +75,7 @@ class ParamProblemTres(BaseModel):
     k: int
     rq: int
     cq: int
-    obstaculo: Optional[List[Obstaculo]]
+    obstaculo: Optional[List[ObstaculoModel]]
 
 
 class ParamProblemTresResponse(BaseModel):

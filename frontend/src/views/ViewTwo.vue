@@ -40,6 +40,57 @@
               ></v-text-field>
             </v-col>
           </v-row>
+          <v-row>
+            <v-container>
+              <v-card class="mx-auto" max-width="800" tile>
+                <v-list dense>
+                  <v-subheader>Obstaculo</v-subheader>
+                  <div>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="4">
+                          <v-text-field
+                            v-model="subform.fila"
+                            label="FO"
+                            filled
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="4">
+                          <v-text-field
+                            v-model="subform.columna"
+                            label="CO"
+                            filled
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" sm="4">
+                          <v-btn
+                            rounded
+                            color="primary"
+                            dark
+                            @click="loadobstaculo"
+                            >Add</v-btn
+                          >
+                          <v-btn rounded color="danger" dark>Clear</v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </div>
+                  <v-container>
+                    <v-list-item-group v-model="selectedItem" color="primary">
+                      <v-list-item v-for="(item, i) in obstaculo" :key="i">
+                        <v-list-item-content>
+                          <v-list-item-title
+                            v-text="`Row ${item.fila} - Column ${item.columna}`"
+                          ></v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-container>
+                </v-list>
+              </v-card>
+            </v-container>
+          </v-row>
         </v-container>
         <v-btn @click="MostrarAjedrez" rounded color="primary" dark>Show</v-btn>
 
@@ -70,6 +121,13 @@
                         :src="itemx.detalle.imageurl"
                       />
                     </div>
+                    <div v-else-if="itemx.detalle.figura === 'Obstaculo'">
+                      <img
+                        width="30"
+                        height="30"
+                        :src="itemx.detalle.imageurl"
+                      />
+                    </div>
                     <div v-else>
                       <span></span>
                     </div>
@@ -79,9 +137,7 @@
             </tbody>
           </table>
         </div>
-        <div>
-        
-        </div>
+        <div></div>
       </v-row>
     </v-container>
   </v-container>
@@ -93,27 +149,48 @@ export default {
   data() {
     return {
       listado: [],
+
+      selectedItem: 1,
+      items: [
+        { text: "Real-Time", icon: "mdi-clock" },
+        { text: "Audience", icon: "mdi-account" },
+        { text: "Conversions", icon: "mdi-flag" },
+      ],
+      subform: {
+        fila: 0,
+        columna: 0,
+      },
+      obstaculo: [],
       formulario: {
         n: 0,
         k: 0,
         rq: 0,
         cq: 0,
-        obstaculo: [
-          {
-            fila: 0,
-            columna: 0,
-          },
-        ],
+        obstaculo: [],
       },
     };
   },
 
   created() {},
   methods: {
+    loadobstaculo() {
+      console.log("click");
+      const item = {
+        fila: parseInt(this.subform.fila),
+        columna: parseInt(this.subform.columna),
+      };
+      this.obstaculo.push(item);
+      this.subform.fila = 0;
+      this.subform.columna = 0;
+      console.log(this.obstaculo);
+    },
     async MostrarAjedrez() {
+      this.formulario.obstaculo = this.obstaculo;
       const data = JSON.parse(JSON.stringify(this.formulario));
       console.log("data enviado");
-      console.log(data);
+      const myJSON = JSON.stringify(data);
+      console.log(myJSON);
+
       await this.axios({
         method: "post",
         url: "laboratory/problemtwo",
@@ -126,7 +203,7 @@ export default {
               let mijson = ResponseObtenido.data;
               console.log(mijson);
               this.listado = mijson;
-              this.$swal("Good job!", "d", "success");
+              //this.$swal("Good job!", "d", "success");
             } else if (ResponseObtenido.codigo == 1) {
               this.$swal(
                 "Ha Ocurrido Error",
@@ -172,11 +249,5 @@ export default {
   text-align: center;
   font-size: 32px;
   line-height: 0;
-}
-.chess-board .light {
-  background: #eee;
-}
-.chess-board .dark {
-  background: #aaa;
 }
 </style>
