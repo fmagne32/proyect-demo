@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 import functools
 from typing import List, Optional
-from ..api.schema import RespuestaApi as SchemaResponse, ObstaculoModel, PadelEnum, DetalleEquipo, ResponsePadel, ParamProblemTres, ParamProblemTresResponse, ParamProblemTresResponse as ShemaTres, FiguraResponse as SchemaFigura, AjedrezEnum, Point, DetailChees, Categoria as SchemaCategoria
+from ..api.schema import RespuestaApi as SchemaResponse, Team, ObstaculoModel, PadelEnum, DetailTeam, ResponsePadel, ParamProblemTres, ParamProblemTresResponse, ParamProblemTresResponse as ShemaTres, FiguraResponse as SchemaFigura, AjedrezEnum, Point, DetailChees, Category as SchemaCategory
 from pydantic.schema import schema
 from pydantic import parse_obj_as
 
@@ -248,67 +248,103 @@ class RepoLaboratory:
         return info
 
     @classmethod
-    def NroFecha(cls, nro: int) -> int:
+    def NroMatch(cls, nro: int) -> int:
         resultado: int = ((nro-1) * 2)
         return resultado
 
     @classmethod
-    async def GeneratePadel(cls, entity: List[SchemaCategoria]) -> ResponsePadel:
+    def pointsxmatch(cls, match: List[Team], name: str) -> dict:
+        points = 0
+        winner = 0
+        lostmatch = 0
+        datelocal = 0
+        datevistant = 0
+        for item in match:
+            if item.local.name == name:
+                datelocal += 1
+                if item.local.sets > item.visitant.sets:
+                    points += 2
+                    winner += 1
+                if item.local.sets < item.visitant.sets:
+                    points += 1
+                    lostmatch += 1
+            if item.visitant.name == name:
+                datevistant += 1
+                if item.visitant.sets > item.local.sets:
+                    points += 2
+                    winner += 1
+                if item.visitant.sets < item.local.sets:
+                    points += 1
+                    lostmatch += 1
+        totaldate = datelocal+datevistant
+        info = dict(team=name, matchdate=totaldate, points=points,
+                    winner=winner, lost=lostmatch)
+        return info
+
+    @classmethod
+    def checkIfDuplicates(cls, listOfElems):
+        if len(listOfElems) == len(set(listOfElems)):
+            return False
+        else:
+            return True
+
+    @classmethod
+    def TeamUnique(cls, teams: List[Team]) -> dict:
+        teamonlywinner = ""
+        countmatch = 0
+        tie = False
+        list_team = []
+        for item in teams:
+            list_team.append(item.local.name)
+            list_team.append(item.visitant.name)
+            countmatch += 1
+
+        res = []
+        for i in list_team:
+            if i not in res:
+                res.append(i)
+        nro = len(res)
+        dates: int = cls.NroMatch(nro)
+        # Nro partidos x fecha
+        nromatchx = nro/2
+        totalmatch = dates * nromatchx
+        print(totalmatch)
+
+        missingmatch = totalmatch - countmatch
+
+        filterx = []
+        for i in res:
+            detail = cls.pointsxmatch(teams, i)
+            filterx.append(detail)
+
+        getwinner = [d for d in filterx if d['lost'] == 0]
+
+        if len(getwinner) > 0:
+            teamonlywinner = getwinner[0]['team']
+
+        array_ponts = []
+        for x in getwinner:
+            array_ponts.append(x['points'])
+        print("mi puntos")
+        print(array_ponts)
+        tie = cls.checkIfDuplicates(array_ponts)
+        print("stadistic")
+        print(filterx)
+        response = dict(team=teamonlywinner,
+                        missing=missingmatch, tie=tie, data=filterx)
+        return response
+
+    @classmethod
+    async def GeneratePadel(cls, entity: List[SchemaCategory]) -> List[ResponsePadel]:
         try:
-            nropartidojugado = 0
-            equipos: List[str] = []
+            response: List[ResponsePadel] = []
             for x in entity:
-
-                for y in x.detalle:
-                    equipos.append(y.local.nombre)
-                    equipos.append(y.visitante.nombre)
-                    nropartidojugado += 1
-
-            # for z in entity:
-
-            res = []
-            for i in equipos:
-                if i not in res:
-                    res.append(i)
-            # print(equipos)
-            # print(res)
-
-            nro = len(res)
-            print("equipos")
-            print(res)
-            print(nro)
-            fechas: int = cls.NroFecha(nro)
-            print("mi fecha")
-            print(fechas)
-
-            # Nro partidos x fecha
-            nropartidos = nro/2
-            totalpartido = fechas * nropartidos
-            print(totalpartido)
-
-            partidofaltante = totalpartido - nropartidojugado
-            print(partidofaltante)
-
-            print("equipo ganado")
-
-            # for item in res:
-            clave: str = "Buenisimos"
-
-            for item in entity[0].detalle:
-                if item.local.nombre == clave:
-                    print(item)
-                    puntos = 0
-                    if item.local.sets > item.visitante.sets:
-                        puntos += 2
-                    if item.local.sets < item.visitante.sets:
-                        puntos += 1
-                if item.visitante.nombre == clave:
-                    if item.visitante.sets > item.local.sets:
-                        puntos += 2
-                    if item.visitante.sets > item.local.sets:
-                        puntos += 1
-
-            return ResponsePadel(categoria="s", equipo="ss", status=PadelEnum.EMPATE)
+                list_team = []
+                entity: dict = cls.TeamUnique(x.teams)
+                item = ResponsePadel(
+                    category=x.name, team=entity['team'], tie=entity['tie'], stadistic=entity['data'])
+                response.append(item)
+            return response
         except Exception as e:
             print(e)
             raise Exception(e)

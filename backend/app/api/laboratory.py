@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 from fastapi import APIRouter
 from ..repository.repolaboratory import RepoLaboratory as RepoLab
-from .schema import RespuestaApi as SchemaResponse, ResponsePadel, DetailChees, ParamProblemTres, ParamProblemTresResponse, ParamProblemTresResponse as ShemaTres, FiguraResponse as SchemaFigura, AjedrezEnum, Point, Categoria as SchemaCategoria
+from .schema import RespuestaApi as SchemaResponse, ResponsePadel, DetailChees, ParamProblemTres, ParamProblemTresResponse, ParamProblemTresResponse as ShemaTres, FiguraResponse as SchemaFigura, AjedrezEnum, Point, Category as SchemaCategoria
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi import Body
@@ -32,8 +32,9 @@ router = APIRouter(prefix="/laboratory")
 @router.post("/problemone")
 async def problemuno(request: List[SchemaCategoria]):
     try:
-        response: ResponsePadel = await RepoLab.GeneratePadel(request)
-        dataxx = SchemaResponse[ResponsePadel](
+        print(request)
+        response:  List[ResponsePadel] = await RepoLab.GeneratePadel(request)
+        dataxx = SchemaResponse[List[ResponsePadel]](
             codigo=0, fechahora=datetime.now(), mensaje="Bien", data=response)
         json_compatible_item_data = jsonable_encoder(dataxx)
         return JSONResponse(status_code=200, content=json_compatible_item_data)

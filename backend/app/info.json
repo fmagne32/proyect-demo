@@ -1,104 +1,104 @@
 [
     {
-        "nombre": "junior",
-        "detalle": [
+        "name": "junior",
+        "teams": [
             {
                 "local": {
-                    "nombre": "Buenisimos",
+                    "name": "Buenisimos",
                     "sets": 3
                 },
-                "visitante": {
-                    "nombre": "Malisimos",
+                "visitant": {
+                    "name": "Malisimos",
                     "sets": 0
                 }
             },
             {
                 "local": {
-                    "nombre": "Buenillos",
+                    "name": "Buenillos",
                     "sets": 2
                 },
-                "visitante": {
-                    "nombre": "Malillos",
+                "visitant": {
+                    "name": "Malillos",
                     "sets": 1
                 }
             },
             {
                 "local": {
-                    "nombre": "Buenillos",
+                    "name": "Buenillos",
                     "sets": 3
                 },
-                "visitante": {
-                    "nombre": "Malisimos",
+                "visitant": {
+                    "name": "Malisimos",
                     "sets": 0
                 }
             },
             {
                 "local": {
-                    "nombre": "Buenisimos",
+                    "name": "Buenisimos",
                     "sets": 3
                 },
-                "visitante": {
-                    "nombre": "Malillos",
+                "visitant": {
+                    "name": "Malillos",
                     "sets": 0
                 }
             },
             {
                 "local": {
-                    "nombre": "Buenisimos",
+                    "name": "Buenisimos",
                     "sets": 2
                 },
-                "visitante": {
-                    "nombre": "Buenillos",
+                "visitant": {
+                    "name": "Buenillos",
                     "sets": 1
                 }
             },
             {
                 "local": {
-                    "nombre": "Malisimos",
+                    "name": "Malisimos",
                     "sets": 0
                 },
-                "visitante": {
-                    "nombre": "Buenisimos",
+                "visitant": {
+                    "name": "Buenisimos",
                     "sets": 3
                 }
             },
             {
                 "local": {
-                    "nombre": "Malillos",
+                    "name": "Malillos",
                     "sets": 1
                 },
-                "visitante": {
-                    "nombre": "Buenillos",
+                "visitant": {
+                    "name": "Buenillos",
                     "sets": 2
                 }
             },
             {
                 "local": {
-                    "nombre": "Malisimos",
+                    "name": "Malisimos",
                     "sets": 0
                 },
-                "visitante": {
-                    "nombre": "Buenillos",
+                "visitant": {
+                    "name": "Buenillos",
                     "sets": 3
                 }
             },
             {
                 "local": {
-                    "nombre": "Malillos",
+                    "name": "Malillos",
                     "sets": 0
                 },
-                "visitante": {
-                    "nombre": "Buenisimos",
+                "visitant": {
+                    "name": "Buenisimos",
                     "sets": 3
                 }
             },
             {
                 "local": {
-                    "nombre": "Buenillos",
+                    "name": "Buenillos",
                     "sets": 1
                 },
-                "visitante": {
-                    "nombre": "Buenisimos",
+                "visitant": {
+                    "name": "Buenisimos",
                     "sets": 2
                 }
             }

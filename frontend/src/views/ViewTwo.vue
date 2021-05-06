@@ -110,7 +110,7 @@
           <v-row>
             <v-container>
               <div>
-                <table class="chess-board">
+                <table style="width: 40%; height: 40%" class="chess-board">
                   <tbody>
                     <tr
                       v-for="(item, index) in listado"

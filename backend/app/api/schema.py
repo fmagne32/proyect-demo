@@ -25,34 +25,38 @@ class PadelEnum(str, enumModel):
 
 
 class JugadasEquipo(BaseModel):
-    equipo: str
+    team: str
     puntos: int
     fecha: int
 
 
-class DetalleEquipo(BaseModel):
-    nombre: str
+class DetailTeam(BaseModel):
+    name: str
     sets: int
 
 
-class Equipo(BaseModel):
-    local: DetalleEquipo
-    visitante: DetalleEquipo
+class Team(BaseModel):
+    local: DetailTeam
+    visitant: DetailTeam
 
 
-class Categoria(BaseModel):
-    nombre: str
-    detalle: List[Equipo]
+class Category(BaseModel):
+    name: str
+    teams: List[Team]
 
 
 class ResponsePadel(BaseModel):
-    categoria: str
-    equipo: str
-    status: PadelEnum
+    category: str
+    team: str
+    tie: bool
+    stadistic: List[dict]
+    #status: PadelEnum
+
 
 class ObstaculoModel(BaseModel):
     fila: int
     columna: int
+
 
 class Point(NamedTuple):
     fila: int
@@ -66,7 +70,7 @@ class DetailChees(BaseModel):
 
 class FiguraResponse(BaseModel):
     selected: bool
-    imageurl:Optional[str]
+    imageurl: Optional[str]
     figura: AjedrezEnum
 
 
