@@ -54,20 +54,20 @@
             <v-container>
               <v-card class="mx-auto" max-width="800" tile>
                 <v-list dense>
-                  <v-subheader>Obstaculo</v-subheader>
+                  <v-subheader>obstacle</v-subheader>
                   <div>
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="4">
                           <v-text-field
-                            v-model="subform.fila"
+                            v-model="subform.row"
                             label="FO"
                             filled
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="4">
                           <v-text-field
-                            v-model="subform.columna"
+                            v-model="subform.column"
                             label="CO"
                             filled
                           ></v-text-field>
@@ -78,7 +78,7 @@
                             rounded
                             color="primary"
                             dark
-                            @click="loadobstaculo"
+                            @click="loadobstacle"
                             >Add</v-btn
                           >
                           <v-btn rounded color="danger" dark>Clear</v-btn>
@@ -88,10 +88,10 @@
                   </div>
                   <v-container>
                     <v-list-item-group v-model="selectedItem" color="primary">
-                      <v-list-item v-for="(item, i) in obstaculo" :key="i">
+                      <v-list-item v-for="(item, i) in obstacle" :key="i">
                         <v-list-item-content>
                           <v-list-item-title
-                            v-text="`Row ${item.fila} - Column ${item.columna}`"
+                            v-text="`Row ${item.row} - Column ${item.column}`"
                           ></v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
@@ -102,7 +102,7 @@
             </v-container>
           </v-row>
 
-          <v-btn @click="MostrarAjedrez" rounded color="success" dark
+          <v-btn @click="ShowChess" rounded color="success" dark
             >Submit</v-btn
           >
           <br />
@@ -123,27 +123,27 @@
                         v-bind:style="{ 'background-color': itemx.color }"
                       >
                         <div>
-                          <div v-if="itemx.detalle.figura == 'Reina'">
+                          <div v-if="itemx.detail.figure == 'Reina'">
                             <img
                               width="40"
                               height="40"
-                              :src="itemx.detalle.imageurl"
+                              :src="itemx.detail.imageurl"
                             />
                           </div>
                           <div
-                            v-else-if="itemx.detalle.figura === 'Disponible'"
+                            v-else-if="itemx.detail.figure === 'Disponible'"
                           >
                             <img
                               width="30"
                               height="30"
-                              :src="itemx.detalle.imageurl"
+                              :src="itemx.detail.imageurl"
                             />
                           </div>
-                          <div v-else-if="itemx.detalle.figura === 'Obstaculo'">
+                          <div v-else-if="itemx.detail.figure === 'Obstaculo'">
                             <img
                               width="30"
                               height="30"
-                              :src="itemx.detalle.imageurl"
+                              :src="itemx.detail.imageurl"
                             />
                           </div>
                           <div v-else>
@@ -177,33 +177,33 @@ export default {
         { text: "Conversions", icon: "mdi-flag" },
       ],
       subform: {
-        fila: 0,
-        columna: 0,
+        row: 0,
+        column: 0,
       },
-      obstaculo: [],
+      obstacle: [],
       formulario: {
         n: 0,
         k: 0,
         rq: 0,
         cq: 0,
-        obstaculo: [],
+        obstacle: [],
       },
     };
   },
 
   created() {},
   methods: {
-    loadobstaculo() {
+    loadobstacle() {
       const item = {
-        fila: parseInt(this.subform.fila),
-        columna: parseInt(this.subform.columna),
+        row: parseInt(this.subform.row),
+        column: parseInt(this.subform.column),
       };
-      this.obstaculo.push(item);
-      this.subform.fila = 0;
-      this.subform.columna = 0;
+      this.obstacle.push(item);
+      this.subform.row = 0;
+      this.subform.column = 0;
     },
-    async MostrarAjedrez() {
-      this.formulario.obstaculo = this.obstaculo;
+    async ShowChess() {
+      this.formulario.obstacle = this.obstacle;
       const data = JSON.parse(JSON.stringify(this.formulario));
       console.log("data enviado");
       const myJSON = JSON.stringify(data);

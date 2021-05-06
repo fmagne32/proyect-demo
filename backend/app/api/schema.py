@@ -24,77 +24,62 @@ class PadelEnum(str, enumModel):
     NINGUNO = 'Ninguno'
 
 
-class JugadasEquipo(BaseModel):
-    team: str
-    puntos: int
-    fecha: int
-
+class ParamProblemTree(BaseModel):
+    world: str
 
 class DetailTeam(BaseModel):
     name: str
     sets: int
 
-
 class Team(BaseModel):
     local: DetailTeam
     visitant: DetailTeam
 
-
 class Category(BaseModel):
     name: str
     teams: List[Team]
-
 
 class ResponsePadel(BaseModel):
     category: str
     team: str
     tie: bool
     stadistic: List[dict]
-    #status: PadelEnum
 
 
-class ObstaculoModel(BaseModel):
-    fila: int
-    columna: int
+class ObstacleModel(BaseModel):
+    row: int
+    column: int
 
 
 class Point(NamedTuple):
-    fila: int
-    columna: int
+    row: int
+    column: int
 
 
 class DetailChees(BaseModel):
     info: int
-    posicion: Point
+    position: Point
 
 
-class FiguraResponse(BaseModel):
+class FigureResponse(BaseModel):
     selected: bool
     imageurl: Optional[str]
-    figura: AjedrezEnum
+    figure: AjedrezEnum
 
 
-class ParamProblemTres(BaseModel):
+class ParamProblemTwo(BaseModel):
     n: int
     k: int
     rq: int
     cq: int
-    obstaculo: Optional[List[ObstaculoModel]]
+    obstacle: Optional[List[ObstacleModel]]
 
 
-class ParamProblemTresResponse(BaseModel):
+class ParamProblemTwoResponse(BaseModel):
     color: str
-    #icono: str
-    # selected:bool
-    # disponible:bool
-    # obstaculo:bool
-    indice: int
-    coordenada: Point
-    detalle: FiguraResponse
-
-    class Config:
-        orm_mode = True
-
+    index: int
+    coordinate: Point
+    detail: FigureResponse
 
 class RespuestaApi(GenericModel, Generic[DataT]):
     codigo: int

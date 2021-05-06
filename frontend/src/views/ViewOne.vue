@@ -16,6 +16,7 @@
                           v-model="category"
                           label="Category"
                           filled
+                          maxlength="16"
                         ></v-text-field>
                       </v-col>
                     </v-container>
@@ -27,6 +28,7 @@
                           v-model="subform.local.name"
                           label="Local Team"
                           filled
+                          maxlength="16"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="2">
@@ -34,6 +36,7 @@
                           v-model="subform.local.sets"
                           label="Sets"
                           filled
+                          type="number"
                         ></v-text-field>
                       </v-col>
 
@@ -42,6 +45,8 @@
                           label="Visiting Team"
                           v-model="subform.visitant.name"
                           filled
+                          
+                          maxlength="16"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="2">
@@ -49,6 +54,7 @@
                           v-model="subform.visitant.sets"
                           label="Sets"
                           filled
+                          type="number"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="2">
@@ -125,6 +131,9 @@
                   </v-row>
 
                   <v-row>
+                    <h5>{{ message }}</h5>
+                  </v-row>
+                  <v-row>
                     <v-container>
                       <v-btn
                         rounded
@@ -161,6 +170,7 @@ export default {
   name: "ProblemOne",
   data() {
     return {
+      message: "",
       teams: [],
       pre_teams: [],
       category: "",
@@ -233,6 +243,7 @@ export default {
               let mijson = ResponseObtenido.data;
               console.log(mijson);
               this.listado = mijson;
+              this.message = JSON.stringify(mijson);
               //this.$swal("Good job!", "d", "success");
             } else if (ResponseObtenido.codigo == 1) {
               this.$swal(

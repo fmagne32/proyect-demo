@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 from fastapi import APIRouter
 from ..repository.repolaboratory import RepoLaboratory as RepoLab
-from .schema import RespuestaApi as SchemaResponse, ResponsePadel, DetailChees, ParamProblemTres, ParamProblemTresResponse, ParamProblemTresResponse as ShemaTres, FiguraResponse as SchemaFigura, AjedrezEnum, Point, Category as SchemaCategoria
+from .schema import RespuestaApi as SchemaResponse, ResponsePadel, ParamProblemTree, DetailChees, ParamProblemTwo, ParamProblemTwoResponse, ParamProblemTwoResponse, FigureResponse, AjedrezEnum, Point, Category as SchemaCategory
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi import Body
@@ -29,36 +29,46 @@ router = APIRouter(prefix="/laboratory")
 # GANANDO B
 # Partido no jugador
 
-@router.post("/problemone")
-async def problemuno(request: List[SchemaCategoria]):
+@router.post("/problemone", response_model=SchemaResponse[List[ResponsePadel]])
+async def problemuno(request: List[SchemaCategory]):
     try:
-        print(request)
-        response:  List[ResponsePadel] = await RepoLab.GeneratePadel(request)
-        dataxx = SchemaResponse[List[ResponsePadel]](
+        response = await RepoLab.GeneratePadel(request)
+        json = SchemaResponse[List[ResponsePadel]](
             codigo=0, fechahora=datetime.now(), mensaje="Bien", data=response)
-        json_compatible_item_data = jsonable_encoder(dataxx)
+        json_compatible_item_data = jsonable_encoder(json)
         return JSONResponse(status_code=200, content=json_compatible_item_data)
     except Exception as e:
         print(e)
         json_compatible_item_data = jsonable_encoder(SchemaResponse[dict](codigo=1, fechahora=datetime.now(
-        ), mensaje="Ha Ocurrido Un Error", data=None))
+        ), mensaje="An error has occurred", data=None))
         return JSONResponse(status_code=200, content=json_compatible_item_data)
 
 
-@router.post("/problemtwo", response_model=SchemaResponse[List[List[ShemaTres]]])
-async def problemdos(request: ParamProblemTres):
+@router.post("/problemtwo", response_model=SchemaResponse[List[List[ParamProblemTwoResponse]]])
+async def problemdos(request: ParamProblemTwo):
     try:
         print(request)
-        response: List[List[ShemaTres]] = await RepoLab.GenerateChess(request)
-        #mimenu = []
-        dataxx = SchemaResponse[List[List[ShemaTres]]](
+        response = await RepoLab.GenerateChess(request)
+        json = SchemaResponse[List[List[ParamProblemTwoResponse]]](
             codigo=0, fechahora=datetime.now(), mensaje="Bien", data=response)
-        json_compatible_item_data = jsonable_encoder(dataxx)
+        json_compatible_item_data = jsonable_encoder(json)
         return JSONResponse(status_code=200, content=json_compatible_item_data)
     except Exception as e:
-        print(e)
-        # customdict = post_utils.LoadExcepcion(e)
-        # print(customdict)
         json_compatible_item_data = jsonable_encoder(SchemaResponse[dict](codigo=1, fechahora=datetime.now(
-        ), mensaje="Ha Ocurrido Un Error", data=None))
+        ), mensaje="An error has occurred", data=None))
+        return JSONResponse(status_code=200, content=json_compatible_item_data)
+
+
+@router.post("/problemtree", response_model=SchemaResponse[int])
+async def problemtree(request: ParamProblemTree):
+    try:
+        print(request)
+        response = await RepoLab.GenerateResultTree(request.world)
+        json = SchemaResponse[int](
+            codigo=0, fechahora=datetime.now(), mensaje="Bien", data=response)
+        json_compatible_item_data = jsonable_encoder(json)
+        return JSONResponse(status_code=200, content=json_compatible_item_data)
+    except Exception as e:
+        json_compatible_item_data = jsonable_encoder(SchemaResponse[dict](codigo=1, fechahora=datetime.now(
+        ), mensaje="An error has occurred", data=None))
         return JSONResponse(status_code=200, content=json_compatible_item_data)
