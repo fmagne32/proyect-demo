@@ -1,63 +1,65 @@
 {
-    "codigo": 0,
-    "fechahora": "2021-05-06T12:13:53.649754",
-    "mensaje": "Bien",
-    "data": [
-      {
-        "category": "junior",
-        "team": "Buenisimos",
-        "tie": false,
-        "stadistic": [
-          {
-            "team": "Buenisimos",
-            "matchdate": 6,
-            "points": 12,
-            "winner": 6,
-            "lost": 0
-          },
-          {
-            "team": "Malisimos",
-            "matchdate": 4,
-            "points": 4,
-            "winner": 0,
-            "lost": 4
-          },
-          {
-            "team": "Buenillos",
-            "matchdate": 6,
-            "points": 10,
-            "winner": 4,
-            "lost": 2
-          },
-          {
-            "team": "Malillos",
-            "matchdate": 4,
-            "points": 4,
-            "winner": 0,
-            "lost": 4
-          }
-        ]
-      },
-      {
-        "category": "Abuelos",
-        "team": "",
-        "tie": false,
-        "stadistic": [
-          {
-            "team": "Abuelos",
-            "matchdate": 2,
-            "points": 3,
-            "winner": 1,
-            "lost": 1
-          },
-          {
-            "team": "Abueletes",
-            "matchdate": 2,
-            "points": 3,
-            "winner": 1,
-            "lost": 1
-          }
-        ]
-      }
-    ]
-  }
+  "code": 0,
+  "date": "2021-05-07T18:21:54.808769",
+  "message": "Good",
+  "data": [
+    {
+      "category": "junior",
+      "team": "Buenisimos",
+      "tie": false,
+      "message": "END",
+      "stadistic": [
+        {
+          "team": "Buenisimos",
+          "matchdate": 6,
+          "points": 12,
+          "winner": 6,
+          "lost": 0
+        },
+        {
+          "team": "Malisimos",
+          "matchdate": 4,
+          "points": 4,
+          "winner": 0,
+          "lost": 4
+        },
+        {
+          "team": "Buenillos",
+          "matchdate": 6,
+          "points": 10,
+          "winner": 4,
+          "lost": 2
+        },
+        {
+          "team": "Malillos",
+          "matchdate": 4,
+          "points": 4,
+          "winner": 0,
+          "lost": 4
+        }
+      ]
+    },
+    {
+      "category": "Senior",
+      "team": "",
+      "tie": true,
+      "message": "END",
+      "stadistic": [
+        {
+          "team": "Abuelos",
+          "matchdate": 2,
+          "points": 3,
+          "winner": 1,
+          "lost": 1
+        },
+        {
+          "team": "Abueletes",
+          "matchdate": 2,
+          "points": 3,
+          "winner": 1,
+          "lost": 1
+        }
+      ]
+    }
+  ]
+}

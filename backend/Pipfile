@@ -8,7 +8,6 @@ fastapi = "*"
 uvicorn = "*"
 pydantic = "*"
 loguru = "*"
-py-linq = "*"
 autopep8 = "*"
 
 [dev-packages]

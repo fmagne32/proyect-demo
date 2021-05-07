@@ -103,5 +103,30 @@
                 }
             }
         ]
+    },
+    {
+        "name": "Senior",
+        "teams": [
+            {
+                "local": {
+                    "name": "Abuelos",
+                    "sets": 3
+                },
+                "visitant": {
+                    "name": "Abueletes",
+                    "sets": 0
+                }
+            },
+            {
+                "local": {
+                    "name": "Abueletes",
+                    "sets": 2
+                },
+                "visitant": {
+                    "name": "Abuelos",
+                    "sets": 1
+                }
+            }
+        ]
     }
 ]
