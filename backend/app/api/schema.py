@@ -18,10 +18,15 @@ class AjedrezEnum(str, enumModel):
     NINGUNO = 'Ninguno'
 
 
-class PadelEnum(str, enumModel):
-    GANO = 'Gano'
-    EMPATE = 'Empate'
-    NINGUNO = 'Ninguno'
+class PositionEnum(str, enumModel):
+    TOP = 'Top'
+    DOWN = 'Down'
+    LEFT = 'Left'
+    RIGHT = 'Right'
+    TOPLEFT = 'TopLeft'
+    TOPRIGHT = 'TopRight'
+    DOWNLEFT = 'DownLeft'
+    DOWNRIGHT = 'DownRight'
 
 
 class ParamProblemTree(BaseModel):
