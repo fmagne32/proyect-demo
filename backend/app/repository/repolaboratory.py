@@ -1,17 +1,10 @@
-from datetime import datetime
-import json
-import functools
 from typing import List, Optional
-from ..api.schema import RespuestaApi as SchemaResponse, PositionEnum, Team, ObstacleModel, DetailTeam, ResponsePadel, ParamProblemTwo, ParamProblemTwo, ParamProblemTwoResponse, FigureResponse, AjedrezEnum, Point, DetailChees, Category as SchemaCategory
-from pydantic.schema import schema
-from pydantic import parse_obj_as
+from ..api.schema import  PositionEnum, Team, ObstacleModel, DetailTeam, ResponsePadel, ParamProblemTwo, ParamProblemTwo, ParamProblemTwoResponse, FigureResponse, ChessEnum, Point, DetailChees, Category as SchemaCategory
 
 
 class RepoLaboratory:
-
     @classmethod
     def FilterAvailableAttack(cls, index: int, option: PositionEnum, obstacle: Optional[List[ObstacleModel]], rowqueen: int, columnqueen: int, maxnum: int) -> Optional[dict]:
-
         if option == PositionEnum.TOP:
             row_x = rowqueen + index
             is_obstacle = cls.GetObstacleBox(
@@ -91,7 +84,6 @@ class RepoLaboratory:
         elif option == PositionEnum.DOWNRIGHT:
             row_x = rowqueen - index
             column_x = columnqueen + index
-
             is_obstacle = cls.GetObstacleBox(
                 obstacle, row_x, column_x)
             if not is_obstacle:
@@ -99,7 +91,6 @@ class RepoLaboratory:
                     return {'row': row_x, 'column': column_x}
                 else:
                     return None
-
         return None
 
     @classmethod
@@ -123,7 +114,6 @@ class RepoLaboratory:
             # TOP
             top = cls.FilterAvailableAttack(
                 contador_m, PositionEnum.TOP, obstacle, row, column, maxnum)
-
             if not top:
                 count_top += 1
             if count_top == 0:
@@ -145,39 +135,29 @@ class RepoLaboratory:
             # RIGHT
             right = cls.FilterAvailableAttack(
                 contador_m, PositionEnum.RIGHT, obstacle, row, column, maxnum)
-
             if not right:
                 count_right += 1
-
             if count_right == 0:
                 diccionariox.append(right)
-
             # TOPRIGHT
             topright = cls.FilterAvailableAttack(
                 contador_m, PositionEnum.TOPRIGHT, obstacle, row, column, maxnum)
-
             if not topright:
                 count_topright += 1
-
             if count_topright == 0:
                 diccionariox.append(topright)
-
             # TOPLEFT
             topleft = cls.FilterAvailableAttack(
                 contador_m, PositionEnum.TOPLEFT, obstacle, row, column, maxnum)
-
             if not topleft:
                 count_topleft += 1
-
             if count_topleft == 0:
                 diccionariox.append(topleft)
-
             # DOWNRIGHT
             downright = cls.FilterAvailableAttack(
                 contador_m, PositionEnum.DOWNRIGHT, obstacle, row, column, maxnum)
             if not downright:
                 count_downright += 1
-
             if count_downright == 0:
                 diccionariox.append(downright)
             # DOWNLEFT
@@ -185,7 +165,6 @@ class RepoLaboratory:
                 contador_m, PositionEnum.DOWNLEFT, obstacle, row, column, maxnum)
             if not downleft:
                 count_downleft += 1
-
             if count_downleft == 0:
                 diccionariox.append(downleft)
         return diccionariox
@@ -195,12 +174,12 @@ class RepoLaboratory:
         listfilter = []
         for y in response:
             for x in y:
-                if ((x.detail.figure != AjedrezEnum.REINA)):
+                if ((x.detail.figure != ChessEnum.QUEEN)):
                     status: bool = cls.GetAvailableBox(
                         box, x.coordinate.row, x.coordinate.column)
                     if status:
                         x.detail = FigureResponse(
-                            selected=True, imageurl='https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Circle-green.svg/1024px-Circle-green.svg.png', figure=AjedrezEnum.DISPONIBLE)
+                            selected=True, imageurl='https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Circle-green.svg/1024px-Circle-green.svg.png', figure=ChessEnum.AVAILABLE)
             listfilter.append(y)
         return listfilter
 
@@ -213,14 +192,11 @@ class RepoLaboratory:
 
     @classmethod
     def GetObstacleBox(cls, listobstacle: Optional[List[ObstacleModel]], row: int, column: int) -> bool:
-        data = False
         if listobstacle is not None:
             for entity in listobstacle:
-
                 if ((entity.row == row) and (entity.column == column)):
-                    data = True
-
-        return data
+                    return True
+        return False
 
     @classmethod
     def evennumber(cls, number: int, index: int) -> int:
@@ -240,16 +216,13 @@ class RepoLaboratory:
 
         is_obstacle = cls.GetObstacleBox(
             obstacle, value_extra, second)
-
-        #
-
         if is_obstacle:
             info_close = ParamProblemTwoResponse(color=color, coordinate=Point(value_extra, second), index=value_extra, detail=FigureResponse(
-                selected=True, imageurl='https://img.pngio.com/cancel-close-delete-dismiss-exit-recycle-remove-icon-close-png-512_512.png', figure=AjedrezEnum.OBSTACULO))
+                selected=True, imageurl='https://img.pngio.com/cancel-close-delete-dismiss-exit-recycle-remove-icon-close-png-512_512.png', figure=ChessEnum.OBSTACLE))
             return info_close
 
         info = ParamProblemTwoResponse(color=color, coordinate=Point(
-            value_extra, second), index=value_extra, detail=FigureResponse(selected=False, figure=AjedrezEnum.NINGUNO))
+            value_extra, second), index=value_extra, detail=FigureResponse(selected=False, figure=ChessEnum.NONEDATA))
 
         return info
 
@@ -283,9 +256,7 @@ class RepoLaboratory:
                     points += 1
                     lostmatch += 1
         totaldate = datelocal+datevistant
-        info = dict(team=name, matchdate=totaldate, points=points,
-                    winner=winner, lost=lostmatch)
-        return info
+        return {'team': name, 'matchdate': totaldate, 'points': points, 'winner': winner, 'lost': lostmatch}
 
     @classmethod
     def checkIfDuplicates(cls, listOfElems: List[int]) -> bool:
@@ -356,7 +327,6 @@ class RepoLaboratory:
                 response.append(item)
             return response
         except Exception as e:
-            print(e)
             raise Exception(e)
 
     @classmethod
@@ -365,26 +335,22 @@ class RepoLaboratory:
             n = entity.n
             rowqueen = entity.rq
             columnqueen = entity.cq
-            count = 0
             countx = 0
-            array_aux: List[List[ParamProblemTwoResponse]] = []
+            array_aux = []
             for i in range(n):
                 extra = n-countx
-                elementsub: List[ParamProblemTwoResponse] = []
+                elementsub = []
                 for j in range(n):
-                    value_extra = n-count
                     item = cls.LoadInfo(entity.obstacle, i, j, extra)
 
                     if ((item.coordinate.column == columnqueen) and (item.coordinate.row == rowqueen)):
                         item.detail = FigureResponse(
-                            selected=True, imageurl='https://pic.onlinewebfonts.com/svg/img_546821.png', figure=AjedrezEnum.REINA)
+                            selected=True, imageurl='https://pic.onlinewebfonts.com/svg/img_546821.png', figure=ChessEnum.QUEEN)
 
                     elementsub.append(item)
-                count += 1
                 array_aux.append(elementsub)
                 countx += 1
 
-            # print(array_aux)
             filter_box = cls.FilterAvailable(
                 array_aux, entity.obstacle, rowqueen, columnqueen, n)
 
@@ -398,10 +364,8 @@ class RepoLaboratory:
             raise Exception(e)
 
     @classmethod
-    # temporal
     async def GenerateResultTree(cls, world: str) -> int:
         n = len(world)
-
         # for por n
         resultc = int(n * (n + 1) / 2)
         return resultc

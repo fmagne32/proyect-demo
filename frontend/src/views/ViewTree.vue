@@ -80,14 +80,14 @@ export default {
         .then((res) => {
           if (res.status == 200) {
             const ResponseObtenido = res.data;
-            if (ResponseObtenido.codigo == 0) {
+            if (ResponseObtenido.code == 0) {
               let mijson = ResponseObtenido.data;
               console.log(mijson);
               this.result = mijson;
-            } else if (ResponseObtenido.codigo == 1) {
+            } else if (ResponseObtenido.code == 1) {
               this.$swal(
-                "Ha Ocurrido Error",
-                ResponseObtenido.mensaje,
+                "An error has occurred",
+                ResponseObtenido.message,
                 "error"
               );
             }

@@ -87,7 +87,7 @@
                     </v-container>
                   </div>
                   <v-container>
-                    <v-list-item-group v-model="selectedItem" color="primary">
+                    <v-list-item-group color="primary">
                       <v-list-item v-for="(item, i) in obstacle" :key="i">
                         <v-list-item-content>
                           <v-list-item-title
@@ -102,9 +102,7 @@
             </v-container>
           </v-row>
 
-          <v-btn @click="ShowChess" rounded color="success" dark
-            >Submit</v-btn
-          >
+          <v-btn @click="ShowChess" rounded color="success" dark>Submit</v-btn>
           <br />
           <br />
           <v-row>
@@ -123,26 +121,24 @@
                         v-bind:style="{ 'background-color': itemx.color }"
                       >
                         <div>
-                          <div v-if="itemx.detail.figure == 'Reina'">
+                          <div v-if="itemx.detail.figure == 'Queen'">
                             <img
                               width="40"
                               height="40"
                               :src="itemx.detail.imageurl"
                             />
                           </div>
-                          <div
-                            v-else-if="itemx.detail.figure === 'Disponible'"
-                          >
+                          <div v-else-if="itemx.detail.figure === 'Available'">
                             <img
-                              width="30"
-                              height="30"
+                              width="40"
+                              height="40"
                               :src="itemx.detail.imageurl"
                             />
                           </div>
-                          <div v-else-if="itemx.detail.figure === 'Obstaculo'">
+                          <div v-else-if="itemx.detail.figure === 'Obstacle'">
                             <img
-                              width="30"
-                              height="30"
+                              width="40"
+                              height="40"
                               :src="itemx.detail.imageurl"
                             />
                           </div>
@@ -217,15 +213,15 @@ export default {
         .then((res) => {
           if (res.status == 200) {
             const ResponseObtenido = res.data;
-            if (ResponseObtenido.codigo == 0) {
+            if (ResponseObtenido.code == 0) {
               let mijson = ResponseObtenido.data;
               console.log(mijson);
               this.listado = mijson;
               //this.$swal("Good job!", "d", "success");
-            } else if (ResponseObtenido.codigo == 1) {
+            } else if (ResponseObtenido.code == 1) {
               this.$swal(
-                "Ha Ocurrido Error",
-                ResponseObtenido.mensaje,
+                "An error has occurred",
+                ResponseObtenido.message,
                 "error"
               );
             }
