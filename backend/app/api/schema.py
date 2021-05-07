@@ -50,6 +50,7 @@ class ResponsePadel(BaseModel):
     category: str
     team: str
     tie: bool
+    message:str
     stadistic: List[dict]
 
 
@@ -87,6 +88,10 @@ class ParamProblemTwoResponse(BaseModel):
     index: int
     coordinate: Point
     detail: FigureResponse
+
+class ProblemTwoResponse(BaseModel):
+    attack: int
+    chess: List[List[ParamProblemTwoResponse]]
 
 
 class RespuestaApi(GenericModel, Generic[DataT]):

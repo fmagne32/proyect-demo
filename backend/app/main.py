@@ -26,9 +26,6 @@ def get_application() -> FastAPI:
     def read_root():
         return {"Hello": "World"}
 
-    @application.get("/items/{item_id}")
-    def read_item(item_id: int, ):
-        return {"item_id": item_id}
     return application
 
 

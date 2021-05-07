@@ -1,8 +1,7 @@
 <template>
   <v-container>
-    <v-container id="demoevento" class="grey lighten-5">
+    <v-container class="grey lighten-5">
       <v-container>
-        <!-- 3 2 3 2 2    -->
         <v-row>
           <v-container>
             <v-card class="mx-auto" tile>
@@ -45,7 +44,6 @@
                           label="Visiting Team"
                           v-model="subform.visitant.name"
                           filled
-                          
                           maxlength="16"
                         ></v-text-field>
                       </v-col>
@@ -187,7 +185,6 @@ export default {
     };
   },
 
-  created() {},
   methods: {
     clear() {
       this.subform.local.name = "";
@@ -238,19 +235,16 @@ export default {
       })
         .then((res) => {
           if (res.status == 200) {
-            const ResponseObtenido = res.data;
-            if (ResponseObtenido.code == 0) {
-              let mijson = ResponseObtenido.data;
-              console.log(mijson);
-              this.listado = mijson;
-              this.message = JSON.stringify(mijson);
-              //this.$swal("Good job!", "d", "success");
-            } else if (ResponseObtenido.code == 1) {
-              this.$swal(
-                "An error has occurred",
-                ResponseObtenido.message,
-                "error"
-              );
+            const Response = res.data;
+            if (Response.code == 0) {
+              let json = Response.data;
+              console.log(json);
+              this.listado = json;
+              this.message = JSON.stringify(json);
+              this.$swal("Good job!", "", "success");
+            } else {
+              const icon = Response.code == 2 ? "warning" : "error";
+              this.$swal("An error has occurred", Response.message, icon);
             }
           }
         })

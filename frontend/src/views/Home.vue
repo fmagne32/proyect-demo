@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <h5>Primero</h5>
     <v-row class="text-center"> <hello-world /></v-row>
   </v-container>
 </template>

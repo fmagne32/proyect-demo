@@ -1,5 +1,6 @@
 from typing import List, Optional
-from ..api.schema import  PositionEnum, Team, ObstacleModel, DetailTeam, ResponsePadel, ParamProblemTwo, ParamProblemTwo, ParamProblemTwoResponse, FigureResponse, ChessEnum, Point, DetailChees, Category as SchemaCategory
+from ..api.schema import PositionEnum, Team, ProblemTwoResponse, ObstacleModel, DetailTeam, ResponsePadel, ParamProblemTwo, ParamProblemTwo, ParamProblemTwoResponse, FigureResponse, ChessEnum, Point, DetailChees, Category as SchemaCategory
+from ..api.utility import UnicornException
 
 
 class RepoLaboratory:
@@ -213,23 +214,20 @@ class RepoLaboratory:
         numberx: int = cls.evennumber(index, paramx)
         color: str = numberx == 0 and "#6d4c41" or "#efebe9"
         second = paramx + 1
-
+        data = ParamProblemTwoResponse(color=color, coordinate=Point(
+            value_extra, second), index=value_extra, detail=FigureResponse(selected=False, figure=ChessEnum.NONEDATA))
         is_obstacle = cls.GetObstacleBox(
             obstacle, value_extra, second)
         if is_obstacle:
-            info_close = ParamProblemTwoResponse(color=color, coordinate=Point(value_extra, second), index=value_extra, detail=FigureResponse(
-                selected=True, imageurl='https://img.pngio.com/cancel-close-delete-dismiss-exit-recycle-remove-icon-close-png-512_512.png', figure=ChessEnum.OBSTACLE))
-            return info_close
-
-        info = ParamProblemTwoResponse(color=color, coordinate=Point(
-            value_extra, second), index=value_extra, detail=FigureResponse(selected=False, figure=ChessEnum.NONEDATA))
-
-        return info
+            data.detail.figure = ChessEnum.OBSTACLE
+            data.detail.selected = True
+            data.detail.imageurl = "https://img.pngio.com/cancel-close-delete-dismiss-exit-recycle-remove-icon-close-png-512_512.png"
+        return data
 
     @classmethod
     def NroMatch(cls, nro: int) -> int:
-        resultado: int = ((nro-1) * 2)
-        return resultado
+        data: int = ((nro-1) * 2)
+        return data
 
     @classmethod
     def pointsxmatch(cls, match: List[Team], name: str) -> dict:
@@ -268,20 +266,31 @@ class RepoLaboratory:
         return count >= 2 and True or False
 
     @classmethod
+    def ValidatePadel(cls, item: Team):
+        if len(item.local.name.strip()) >= 16:
+            raise UnicornException(
+                name=f'The team local name {item.local.name} must not be longer than 16 characters.')
+        if len(item.visitant.name.strip()) >= 16:
+            raise UnicornException(
+                name=f'The team visitant name {item.visitant.name} must not be longer than 16 characters.')
+        if item.local.sets < 0:
+            raise UnicornException(
+                name=f'Local set must be greater than zero.')
+        if item.visitant.sets < 0:
+            raise UnicornException(
+                name=f'Visitant set must be greater than zero.')
+        if item.local.sets == item.visitant.sets:
+            raise UnicornException(name=f'A tie is not allowed in the padel.')
+
+    @classmethod
     def LoadTeam(cls, teams: List[Team]) -> dict:
         teamonlywinner = ""
         countmatch = 0
         list_team = []
         for item in teams:
-
-            if len(item.local.name) >= 16:
-                print('f')
-
-            if len(item.visitant.name) >= 16:
-                print('f')
-
-            list_team.append(item.local.name)
-            list_team.append(item.visitant.name)
+            cls.ValidatePadel(item)
+            list_team.append(item.local.name.strip())
+            list_team.append(item.visitant.name.strip())
             countmatch += 1
 
         res = []
@@ -315,23 +324,50 @@ class RepoLaboratory:
     async def GeneratePadel(cls, entity: List[SchemaCategory]) -> List[ResponsePadel]:
         try:
             response: List[ResponsePadel] = []
-
-            """if getcategoria is None:
-                print("inicio")
-                raise UnicornException(
-                    name='No Existe La categoria con id {}'.format(categoria['id']))"""
             for x in entity:
+                if len(x.name.strip()) >= 16:
+                    raise UnicornException(
+                        name='the category name must not be longer than 16 characters.')
                 entity: dict = cls.LoadTeam(x.teams)
                 item = ResponsePadel(
-                    category=x.name, team=entity['team'], tie=entity['tie'], stadistic=entity['data'])
+                    category=x.name, team=entity['team'], tie=entity['tie'], stadistic=entity['data'], message="END")
                 response.append(item)
             return response
+        except UnicornException as e:
+            raise UnicornException(name=e.__dict__['name'])
         except Exception as e:
             raise Exception(e)
 
     @classmethod
-    async def GenerateChess(cls, entity: ParamProblemTwo) -> List[List[ParamProblemTwoResponse]]:
+    def validateChess(cls, request: ParamProblemTwo):
+        if request.n <= 0:
+            raise UnicornException(
+                name=f'the N value is required')
+
+        if request.rq <= 0:
+            raise UnicornException(name=f'the RQ value is required')
+
+        if request.cq <= 0:
+            raise UnicornException(name=f'the CQ value is required')
+
+        if request.obstacle is not None:
+
+            if request.k <= 0:
+                raise UnicornException(name=f'the K value is required')
+
+
+            if request.k != len(request.obstacle):
+                raise UnicornException(
+                    name=f'the obstacle length must be equal to k {request.k}')
+                for x in request.obstacle:
+                    if ((x.row == request.rq) and (x.column == request.cq)):
+                        raise UnicornException(
+                            name=f'the obstacle square cannot be the same as the queen')
+
+    @classmethod
+    async def GenerateChess(cls, entity: ParamProblemTwo) -> ProblemTwoResponse:
         try:
+            cls.validateChess(entity)
             n = entity.n
             rowqueen = entity.rq
             columnqueen = entity.cq
@@ -357,15 +393,29 @@ class RepoLaboratory:
             result_list = cls.listattackbox(
                 array_aux, filter_box)
 
-            print(len(filter_box))
-            return result_list
+            # print(len(filter_box))
+            data = ProblemTwoResponse(
+                attack=len(filter_box), chess=result_list)
+            return data
+        except UnicornException as e:
+            raise UnicornException(name=e.__dict__['name'])
         except Exception as e:
             print(e)
             raise Exception(e)
 
     @classmethod
     async def GenerateResultTree(cls, world: str) -> int:
-        n = len(world)
-        # for por n
-        resultc = int(n * (n + 1) / 2)
-        return resultc
+        try:
+
+            n = len(world)
+            if n == 3:
+                print("inicio")
+                raise UnicornException(
+                    name='Errox')
+            # for por n
+            resultc = int(n * (n + 1) / 2)
+            return resultc
+        except UnicornException as e:
+            raise UnicornException(name=e.__dict__['name'])
+        except Exception as e:
+            raise Exception(e)

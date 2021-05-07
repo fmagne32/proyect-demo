@@ -2,34 +2,14 @@
   <v-container>
     <v-container class="grey lighten-5">
       <v-row>
-        <v-btn
-          rounded
-          color="primary"
-          @click="
-            $router.push({
-              name: 'Home',
-            })
-          "
-          dark
-          >Home</v-btn
-        >
-
         <v-container>
           <v-row>
             <v-col cols="12" sm="6">
-              <v-text-field
-                label="N"
-                v-model="formulario.n"
-                filled
-              ></v-text-field>
+              <v-text-field label="N" v-model="request.n" filled></v-text-field>
             </v-col>
 
             <v-col cols="12" sm="6">
-              <v-text-field
-                label="K"
-                v-model="formulario.k"
-                filled
-              ></v-text-field>
+              <v-text-field label="K" v-model="request.k" filled></v-text-field>
             </v-col>
           </v-row>
 
@@ -37,7 +17,7 @@
             <v-col cols="12" sm="6">
               <v-text-field
                 label="RQ"
-                v-model="formulario.rq"
+                v-model="request.rq"
                 filled
               ></v-text-field>
             </v-col>
@@ -45,7 +25,7 @@
             <v-col cols="12" sm="6">
               <v-text-field
                 label="CQ"
-                v-model="formulario.cq"
+                v-model="request.cq"
                 filled
               ></v-text-field>
             </v-col>
@@ -81,7 +61,6 @@
                             @click="loadobstacle"
                             >Add</v-btn
                           >
-                          <v-btn rounded color="danger" dark>Clear</v-btn>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -102,18 +81,32 @@
             </v-container>
           </v-row>
 
-          <v-btn @click="ShowChess" rounded color="success" dark>Submit</v-btn>
+          <div>
+            <v-btn
+              rounded
+              color="primary"
+              @click="
+                $router.push({
+                  name: 'Home',
+                })
+              "
+              dark
+              >Home</v-btn
+            >
+            <v-btn @click="ShowChess" rounded color="success" dark
+              >Submit</v-btn
+            >
+          </div>
+
           <br />
           <br />
           <v-row>
             <v-container>
               <div>
+                <h4>Queen's attack number is {{ attack }}</h4>
                 <table style="width: 40%; height: 40%" class="chess-board">
                   <tbody>
-                    <tr
-                      v-for="(item, index) in listado"
-                      :key="`chess-${index}`"
-                    >
+                    <tr v-for="(item, index) in chess" :key="`chess-${index}`">
                       <td
                         class="light"
                         v-for="(itemx, indej) in item"
@@ -164,20 +157,14 @@ export default {
   name: "ProblemTwo",
   data() {
     return {
-      listado: [],
-
-      selectedItem: 1,
-      items: [
-        { text: "Real-Time", icon: "mdi-clock" },
-        { text: "Audience", icon: "mdi-account" },
-        { text: "Conversions", icon: "mdi-flag" },
-      ],
+      chess: [],
+      attack: 0,
       subform: {
         row: 0,
         column: 0,
       },
       obstacle: [],
-      formulario: {
+      request: {
         n: 0,
         k: 0,
         rq: 0,
@@ -199,8 +186,8 @@ export default {
       this.subform.column = 0;
     },
     async ShowChess() {
-      this.formulario.obstacle = this.obstacle;
-      const data = JSON.parse(JSON.stringify(this.formulario));
+      this.request.obstacle = this.obstacle;
+      const data = JSON.parse(JSON.stringify(this.request));
       console.log("data enviado");
       const myJSON = JSON.stringify(data);
       console.log(myJSON);
@@ -216,13 +203,15 @@ export default {
             if (ResponseObtenido.code == 0) {
               let mijson = ResponseObtenido.data;
               console.log(mijson);
-              this.listado = mijson;
-              //this.$swal("Good job!", "d", "success");
-            } else if (ResponseObtenido.code == 1) {
+              this.chess = mijson.chess;
+              this.attack = mijson.attack;
+              this.$swal("Good job!", "", "success");
+            } else {
+              const icon = ResponseObtenido.code == 2 ? "warning" : "error";
               this.$swal(
                 "An error has occurred",
                 ResponseObtenido.message,
-                "error"
+                icon
               );
             }
           }

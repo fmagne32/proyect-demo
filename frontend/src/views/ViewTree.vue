@@ -6,23 +6,13 @@
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="formone.world"
+                v-model="world"
                 label="Value String"
                 filled
               ></v-text-field>
             </v-col>
 
             <v-col cols="12" sm="6">
-              <div>
-                <pre><code>pre code {
-  background-color: #eee;
-  border: 1px solid #999;
-  display: block;
-  padding: 20px;
-}
-</code></pre>
-              </div>
-
               <div>
                 <v-text-field
                   v-model="result"
@@ -61,9 +51,7 @@ export default {
   name: "ProblemTree",
   data() {
     return {
-      formone: {
-        word: "",
-      },
+      word: "",
       result: 0,
     };
   },
@@ -71,11 +59,9 @@ export default {
   created() {},
   methods: {
     async submitproblemtree() {
-      const data = JSON.parse(JSON.stringify(this.formone));
       await this.axios({
         method: "post",
-        url: "laboratory/problemtree",
-        data: data,
+        url: `laboratory/problemtree/${this.word}`,
       })
         .then((res) => {
           if (res.status == 200) {
@@ -84,11 +70,12 @@ export default {
               let mijson = ResponseObtenido.data;
               console.log(mijson);
               this.result = mijson;
-            } else if (ResponseObtenido.code == 1) {
+            } else {
+              const icon = ResponseObtenido.code == 2 ? "warning" : "error";
               this.$swal(
                 "An error has occurred",
                 ResponseObtenido.message,
-                "error"
+                icon
               );
             }
           }
