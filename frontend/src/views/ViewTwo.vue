@@ -45,7 +45,9 @@
                             filled
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="4">
+                        <v-col cols="12" sm="4"
+                          >//this.listado = json;
+
                           <v-text-field
                             v-model="subform.column"
                             label="CO"

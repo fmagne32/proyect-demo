@@ -35,6 +35,8 @@
                           v-model="subform.local.sets"
                           label="Sets"
                           filled
+                          min="0"
+                          max="50"
                           type="number"
                         ></v-text-field>
                       </v-col>
@@ -53,13 +55,16 @@
                           label="Sets"
                           filled
                           type="number"
+                          min="0"
+                          max="50"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="2">
                         <br />
-                        <v-btn rounded color="primary" dark @click="addteam"
-                          >Add</v-btn
-                        >
+
+                        <v-btn @click="addteam" :disabled="notshow">
+                          Add
+                        </v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -129,7 +134,12 @@
                   </v-row>
 
                   <v-row>
-                    <h5>{{ message }}</h5>
+                    <div v-for="(item, i) in detail" :key="i">
+                      <h5>Category {{ item.category }}</h5>
+                      <h5>Team {{ item.team }}</h5>
+                      <h5 v-if="item.tie">TIE</h5>
+                      <h5>{{ item.message }}</h5>
+                    </div>
                   </v-row>
                   <v-row>
                     <v-container>
@@ -172,6 +182,14 @@ export default {
       teams: [],
       pre_teams: [],
       category: "",
+      detail: [],
+      notshow: false,
+      subvalidate: {
+        local: false,
+        setl: false,
+        visitant: false,
+        setv: false,
+      },
       subform: {
         local: {
           name: "",
@@ -197,14 +215,10 @@ export default {
       this.teams = [];
     },
     addprelist() {
-      console.log("click pre");
       const item = {
         name: this.category,
         teams: this.teams,
       };
-      const myJSON = JSON.stringify(this.teams);
-      console.log(myJSON);
-
       this.pre_teams.push(item);
       this.clearpreteams();
     },
@@ -222,11 +236,9 @@ export default {
       this.teams.push(item);
       this.clear();
     },
+
     async submitproblemone() {
       const data = JSON.parse(JSON.stringify(this.pre_teams));
-      console.log("data enviado");
-      const myJSON = JSON.stringify(data);
-      console.log(myJSON);
 
       await this.axios({
         method: "post",
@@ -239,8 +251,7 @@ export default {
             if (Response.code == 0) {
               let json = Response.data;
               console.log(json);
-              this.listado = json;
-              this.message = JSON.stringify(json);
+              this.detail = json;
               this.$swal("Good job!", "", "success");
             } else {
               const icon = Response.code == 2 ? "warning" : "error";

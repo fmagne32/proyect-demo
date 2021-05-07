@@ -51,7 +51,7 @@ export default {
   name: "ProblemTree",
   data() {
     return {
-      word: "",
+      world: "",
       result: 0,
     };
   },
@@ -61,7 +61,7 @@ export default {
     async submitproblemtree() {
       await this.axios({
         method: "post",
-        url: `laboratory/problemtree/${this.word}`,
+        url: `laboratory/problemtree/${this.world}`,
       })
         .then((res) => {
           if (res.status == 200) {

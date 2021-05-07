@@ -324,6 +324,9 @@ class RepoLaboratory:
     async def GeneratePadel(cls, entity: List[SchemaCategory]) -> List[ResponsePadel]:
         try:
             response: List[ResponsePadel] = []
+            if len(entity) == 0:
+                raise UnicornException(
+                    name='required team.')
             for x in entity:
                 if len(x.name.strip()) >= 16:
                     raise UnicornException(
@@ -354,7 +357,6 @@ class RepoLaboratory:
 
             if request.k <= 0:
                 raise UnicornException(name=f'the K value is required')
-
 
             if request.k != len(request.obstacle):
                 raise UnicornException(
@@ -406,12 +408,7 @@ class RepoLaboratory:
     @classmethod
     async def GenerateResultTree(cls, world: str) -> int:
         try:
-
             n = len(world)
-            if n == 3:
-                print("inicio")
-                raise UnicornException(
-                    name='Errox')
             # for por n
             resultc = int(n * (n + 1) / 2)
             return resultc
