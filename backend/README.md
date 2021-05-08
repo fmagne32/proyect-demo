@@ -22,4 +22,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload or  uvicorn app.main:ap
 ```
 My Url Docs http://0.0.0.0:8000/docs#/
 
+
+
 ```
+[![API docs](app/resource/swagger_doc)](https://github.com/fmagne32/proyect-demo)

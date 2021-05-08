@@ -133,14 +133,53 @@
                     </v-container>
                   </v-row>
 
-                  <v-row>
-                    <div v-for="(item, i) in detail" :key="i">
-                      <h5>Category {{ item.category }}</h5>
-                      <h5>Team {{ item.team }}</h5>
-                      <h5 v-if="item.tie">TIE</h5>
-                      <h5>{{ item.message }}</h5>
-                    </div>
+                  <v-row v-if="detail.length">
+                    <v-container>
+                      <v-card class="mx-auto" max-width="900">
+                        <v-toolbar flat color="blue accent-4" dark>
+                          <v-btn icon>
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                          <v-toolbar-title>Response</v-toolbar-title>
+                        </v-toolbar>
+                        <v-container>
+                          <div>
+                            <v-card-text v-for="(item, i) in detail" :key="i">
+                              <h3 class="title mb-2">
+                                {{ item.category }}
+                              </h3>
+                              <v-divider :key="i"></v-divider>
+
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title
+                                    ><h2>Team {{ item.team }}</h2>
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>
+                                    <div v-if="item.tie"><h3>Tie</h3></div>
+                                    <div v-else><h3>Tie 0</h3></div>
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+
+                              <div>
+                                <h3>Stadistic</h3>
+                                <pre data-enlighter-language="json">
+                                {{ item.stadistic }}
+                                </pre>
+                              </div>
+                              <h5>{{ item.message }}</h5>
+                            </v-card-text>
+                          </div>
+                        </v-container>
+                      </v-card>
+                    </v-container>
                   </v-row>
+
                   <v-row>
                     <v-container>
                       <v-btn
@@ -250,7 +289,6 @@ export default {
             const Response = res.data;
             if (Response.code == 0) {
               let json = Response.data;
-              console.log(json);
               this.detail = json;
               this.$swal("Good job!", "", "success");
             } else {
@@ -262,6 +300,7 @@ export default {
         .catch((err) => {
           console.log("ERROR");
           console.log(err.response);
+          this.$swal("An error has occurred Js", "", "error");
         });
     },
   },

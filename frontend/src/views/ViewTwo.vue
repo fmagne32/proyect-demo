@@ -3,6 +3,7 @@
     <v-container class="grey lighten-5">
       <v-row>
         <v-container>
+          <v-subheader class="text-h6">Chess</v-subheader>
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field label="N" v-model="request.n" filled></v-text-field>
@@ -45,9 +46,7 @@
                             filled
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="4"
-                          >//this.listado = json;
-
+                        <v-col cols="12" sm="4">
                           <v-text-field
                             v-model="subform.column"
                             label="CO"
@@ -190,10 +189,6 @@ export default {
     async ShowChess() {
       this.request.obstacle = this.obstacle;
       const data = JSON.parse(JSON.stringify(this.request));
-      console.log("data enviado");
-      const myJSON = JSON.stringify(data);
-      console.log(myJSON);
-
       await this.axios({
         method: "post",
         url: "laboratory/problemtwo",
@@ -201,26 +196,22 @@ export default {
       })
         .then((res) => {
           if (res.status == 200) {
-            const ResponseObtenido = res.data;
-            if (ResponseObtenido.code == 0) {
-              let mijson = ResponseObtenido.data;
-              console.log(mijson);
-              this.chess = mijson.chess;
-              this.attack = mijson.attack;
+            const Response = res.data;
+            if (Response.code == 0) {
+              let json = Response.data;
+              this.chess = json.chess;
+              this.attack = json.attack;
               this.$swal("Good job!", "", "success");
             } else {
-              const icon = ResponseObtenido.code == 2 ? "warning" : "error";
-              this.$swal(
-                "An error has occurred",
-                ResponseObtenido.message,
-                icon
-              );
+              const icon = Response.code == 2 ? "warning" : "error";
+              this.$swal("An error has occurred", Response.message, icon);
             }
           }
         })
         .catch((err) => {
           console.log("ERROR");
           console.log(err.response);
+          this.$swal("An error has occurred Js", "", "error");
         });
     },
   },

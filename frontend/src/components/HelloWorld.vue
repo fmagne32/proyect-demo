@@ -13,6 +13,7 @@
             "
             >Problem 1</v-btn
           >
+          &nbsp;&nbsp;&nbsp;
           <v-btn
             color="primary"
             elevation="2"
@@ -22,7 +23,7 @@
               })
             "
             >Problem 2</v-btn
-          >
+          >&nbsp;&nbsp;&nbsp;
           <v-btn
             color="primary"
             elevation="2"

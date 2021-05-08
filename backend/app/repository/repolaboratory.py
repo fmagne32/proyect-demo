@@ -355,16 +355,18 @@ class RepoLaboratory:
 
         if request.obstacle is not None:
 
-            if request.k <= 0:
-                raise UnicornException(name=f'the K value is required')
+            if len(request.obstacle)>0:
 
-            if request.k != len(request.obstacle):
-                raise UnicornException(
-                    name=f'the obstacle length must be equal to k {request.k}')
-                for x in request.obstacle:
-                    if ((x.row == request.rq) and (x.column == request.cq)):
-                        raise UnicornException(
-                            name=f'the obstacle square cannot be the same as the queen')
+                if request.k <= 0:
+                    raise UnicornException(name=f'the K value is required')
+
+                if request.k != len(request.obstacle):
+                    raise UnicornException(
+                        name=f'the obstacle length must be equal to k {request.k}')
+                    for x in request.obstacle:
+                        if ((x.row == request.rq) and (x.column == request.cq)):
+                            raise UnicornException(
+                                name=f'the obstacle square cannot be the same as the queen')
 
     @classmethod
     async def GenerateChess(cls, entity: ParamProblemTwo) -> ProblemTwoResponse:

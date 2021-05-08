@@ -1,7 +1,16 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">App Demo</div>
+      <div
+        class="d-flex align-center"
+        @click="
+          $router.push({
+            name: 'Home',
+          })
+        "
+      >
+        App Demo
+      </div>
 
       <v-spacer></v-spacer>
 

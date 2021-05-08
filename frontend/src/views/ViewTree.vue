@@ -65,18 +65,13 @@ export default {
       })
         .then((res) => {
           if (res.status == 200) {
-            const ResponseObtenido = res.data;
-            if (ResponseObtenido.code == 0) {
-              let mijson = ResponseObtenido.data;
-              console.log(mijson);
-              this.result = mijson;
+            const Response = res.data;
+            if (Response.code == 0) {
+              let json = Response.data;
+              this.result = json;
             } else {
-              const icon = ResponseObtenido.code == 2 ? "warning" : "error";
-              this.$swal(
-                "An error has occurred",
-                ResponseObtenido.message,
-                icon
-              );
+              const icon = Response.code == 2 ? "warning" : "error";
+              this.$swal("An error has occurred", Response.message, icon);
             }
           }
         })
