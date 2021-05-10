@@ -1,12 +1,12 @@
 # Proyecto FastApi
 
 
-## Initialize Pipenv
+## PipEnv Install 
 ```
-npm install
+pip install pipenv
 
 ```
-## PipEnv Install
+## Initialize Pipenv
 ```
 pipenv shell
 

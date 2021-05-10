@@ -31,4 +31,11 @@ ALLOWED_HOSTS: List[str] = config(
     default="",
 )
 
+###
+QUEEN: str = config("QUEEN",  default="")
+AVAILABLE: str = config("AVAILABLE",  default="")
+CLOSED: str = config("CLOSED",  default="")
+###
+
+
 logger.configure(handlers=[{"sink": sys.stderr, "level": LOGGING_LEVEL}])

@@ -83,17 +83,6 @@
           </v-row>
 
           <div>
-            <v-btn
-              rounded
-              color="primary"
-              @click="
-                $router.push({
-                  name: 'Home',
-                })
-              "
-              dark
-              >Home</v-btn
-            >
             <v-btn @click="ShowChess" rounded color="success" dark
               >Submit</v-btn
             >
@@ -103,7 +92,7 @@
           <br />
           <v-row>
             <v-container>
-              <div>
+              <div v-if="chess.length">
                 <h4>Queen's attack number is {{ attack }}</h4>
                 <table style="width: 40%; height: 40%" class="chess-board">
                   <tbody>

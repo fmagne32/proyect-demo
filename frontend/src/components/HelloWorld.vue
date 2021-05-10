@@ -1,42 +1,6 @@
 <template>
   <v-container>
     <v-row class="text-center">
-      <v-col cols="12">
-        <v-container>
-          <v-btn
-            color="primary"
-            elevation="2"
-            @click="
-              $router.push({
-                name: 'ProblemOne',
-              })
-            "
-            >Problem 1</v-btn
-          >
-          &nbsp;&nbsp;&nbsp;
-          <v-btn
-            color="primary"
-            elevation="2"
-            @click="
-              $router.push({
-                name: 'ProblemTwo',
-              })
-            "
-            >Problem 2</v-btn
-          >&nbsp;&nbsp;&nbsp;
-          <v-btn
-            color="primary"
-            elevation="2"
-            @click="
-              $router.push({
-                name: 'ProblemTree',
-              })
-            "
-            >Problem 3</v-btn
-          >
-        </v-container>
-      </v-col>
-
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">Welcome to Proyect Demo</h1>
 

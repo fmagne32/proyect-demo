@@ -24,17 +24,6 @@
           </v-row>
           <v-row>
             <v-container>
-              <v-btn
-                rounded
-                @click="
-                  $router.push({
-                    name: 'Home',
-                  })
-                "
-                color="primary"
-                dark
-                >Home</v-btn
-              >
               <v-btn rounded @click="submitproblemtree" color="success" dark
                 >Submit
               </v-btn>

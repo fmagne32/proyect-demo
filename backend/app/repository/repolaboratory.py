@@ -1,6 +1,9 @@
 from typing import List, Optional
 from ..api.schema import PositionEnum, Team, ProblemTwoResponse, ObstacleModel, DetailTeam, ResponsePadel, ParamProblemTwo, ParamProblemTwo, ParamProblemTwoResponse, FigureResponse, ChessEnum, Point, DetailChees, Category as SchemaCategory
 from ..api.utility import UnicornException
+import json
+from loguru import logger
+from ..core.config import QUEEN, AVAILABLE, CLOSED
 
 
 class RepoLaboratory:
@@ -95,12 +98,12 @@ class RepoLaboratory:
         return None
 
     @classmethod
-    def FilterAvailable(cls, lista: List[List[ParamProblemTwoResponse]], obstacle: Optional[List[ObstacleModel]], row: int, column: int, size: int):
+    def FilterAvailable(cls, obstacle: Optional[List[ObstacleModel]], row: int, column: int, size: int):
         maxnum = size+1
-        contador = (size-row)+1
-        n = (size - contador)+1
+        n = size
         contador_m = 0
         diccionariox = []
+
         count_top = 0
         count_down = 0
         count_left = 0
@@ -171,20 +174,6 @@ class RepoLaboratory:
         return diccionariox
 
     @classmethod
-    def listattackbox(cls, response: List[List[ParamProblemTwoResponse]], box: List[dict]):
-        listfilter = []
-        for y in response:
-            for x in y:
-                if ((x.detail.figure != ChessEnum.QUEEN)):
-                    status: bool = cls.GetAvailableBox(
-                        box, x.coordinate.row, x.coordinate.column)
-                    if status:
-                        x.detail = FigureResponse(
-                            selected=True, imageurl='https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Circle-green.svg/1024px-Circle-green.svg.png', figure=ChessEnum.AVAILABLE)
-            listfilter.append(y)
-        return listfilter
-
-    @classmethod
     def GetAvailableBox(cls, response: List[dict], row: int, column: int) -> bool:
         for entity in response:
             if ((entity['row'] == row) and (entity['column'] == column)):
@@ -210,18 +199,34 @@ class RepoLaboratory:
         return 0
 
     @classmethod
-    def LoadInfo(cls, obstacle: Optional[List[ObstacleModel]], index: int, paramx: int, value_extra: int) -> ParamProblemTwoResponse:
+    def LoadInfo(cls, obstacle: Optional[List[ObstacleModel]], index: int, paramx: int, value_extra: int, rowqueen: int, columnqueen: int, box: List[dict]) -> ParamProblemTwoResponse:
+
         numberx: int = cls.evennumber(index, paramx)
         color: str = numberx == 0 and "#6d4c41" or "#efebe9"
         second = paramx + 1
+
         data = ParamProblemTwoResponse(color=color, coordinate=Point(
             value_extra, second), index=value_extra, detail=FigureResponse(selected=False, figure=ChessEnum.NONEDATA))
+
+        if ((data.coordinate.column == columnqueen) and (data.coordinate.row == rowqueen)):
+            data.detail = FigureResponse(
+                selected=True, imageurl=QUEEN, figure=ChessEnum.QUEEN)
+
         is_obstacle = cls.GetObstacleBox(
             obstacle, value_extra, second)
+
         if is_obstacle:
             data.detail.figure = ChessEnum.OBSTACLE
             data.detail.selected = True
-            data.detail.imageurl = "https://img.pngio.com/cancel-close-delete-dismiss-exit-recycle-remove-icon-close-png-512_512.png"
+            data.detail.imageurl = CLOSED
+
+        if not is_obstacle:
+            status: bool = cls.GetAvailableBox(
+                box, data.coordinate.row, data.coordinate.column)
+            if status:
+                data.detail = FigureResponse(
+                    selected=True, imageurl=AVAILABLE, figure=ChessEnum.AVAILABLE)
+
         return data
 
     @classmethod
@@ -355,7 +360,7 @@ class RepoLaboratory:
 
         if request.obstacle is not None:
 
-            if len(request.obstacle)>0:
+            if len(request.obstacle) > 0:
 
                 if request.k <= 0:
                     raise UnicornException(name=f'the K value is required')
@@ -371,40 +376,34 @@ class RepoLaboratory:
     @classmethod
     async def GenerateChess(cls, entity: ParamProblemTwo) -> ProblemTwoResponse:
         try:
+
             cls.validateChess(entity)
             n = entity.n
             rowqueen = entity.rq
             columnqueen = entity.cq
             countx = 0
-            array_aux = []
+            array_aux: List[List[ParamProblemTwoResponse]] = []
+            filter_box = cls.FilterAvailable(
+                entity.obstacle, rowqueen, columnqueen, n)
+
             for i in range(n):
                 extra = n-countx
                 elementsub = []
                 for j in range(n):
-                    item = cls.LoadInfo(entity.obstacle, i, j, extra)
-
-                    if ((item.coordinate.column == columnqueen) and (item.coordinate.row == rowqueen)):
-                        item.detail = FigureResponse(
-                            selected=True, imageurl='https://pic.onlinewebfonts.com/svg/img_546821.png', figure=ChessEnum.QUEEN)
+                    item = cls.LoadInfo(entity.obstacle, i,
+                                        j, extra, rowqueen, columnqueen, filter_box)
 
                     elementsub.append(item)
                 array_aux.append(elementsub)
                 countx += 1
 
-            filter_box = cls.FilterAvailable(
-                array_aux, entity.obstacle, rowqueen, columnqueen, n)
-
-            result_list = cls.listattackbox(
-                array_aux, filter_box)
-
-            # print(len(filter_box))
             data = ProblemTwoResponse(
-                attack=len(filter_box), chess=result_list)
+                attack=len(filter_box), chess=array_aux)
             return data
         except UnicornException as e:
             raise UnicornException(name=e.__dict__['name'])
         except Exception as e:
-            print(e)
+            logger.error(e.message)
             raise Exception(e)
 
     @classmethod
